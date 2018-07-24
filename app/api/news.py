@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from . import apiv1
-
-
+from ..models.news import News
+from app import db
 
 class NewsController():
     def __init__(self):
@@ -57,7 +57,10 @@ class NewsController():
 
                           '''
         news = []
-        return jsonify({'news': {"name":"hi"}})
-
+        data  =  request.form
+        news = News(title=data["title"], url=data["title"], user_id=1)
+        db.session.add(news)
+        db.session.commit()
+        return jsonify({'news': dict(title=data["title"], url=data["url"])})
 
 

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text
-from uuid import UUID
+import uuid
 from .dogear_model import DogearMixin
 from flask.ext.migrate import Migrate
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -18,6 +18,7 @@ class News(DogearMixin, db.Model):
     def __init__(self, user_id, title, url, picture_url="", source=None):
         '''Create the new news artcile'''
         super().__init__()
+        self.uuid=str(uuid.uuid4())
         self.user_id=user_id
         self.title=title
         self.url = url
