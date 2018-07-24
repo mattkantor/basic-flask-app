@@ -5,6 +5,7 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/dogear'
 # SQLALCHEMY_ECHO = True
 CELERY_BROKER_URL = 'sqla+postgresql://localhost/dogear'
 CELERY_TASK_SERIALIZER = 'json'
+OAUTHLIB_INSECURE_TRANSPORT=1
 CELERY_ACCEPT_CONTENT = ['json']
 CELERYBEAT_SCHEDULE = {
     'example_task': {
@@ -13,5 +14,6 @@ CELERYBEAT_SCHEDULE = {
         'args': ()
     },
 }
+
 
 ERROR_404_HELP = False

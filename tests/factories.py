@@ -1,6 +1,6 @@
 import factory
 
-from app.models.model import db, Document
+from app.models.news import db, News
 
 
 class SQLAlchemyModelFactory(factory.Factory):

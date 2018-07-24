@@ -9,7 +9,7 @@ run:
 	python3 manage.py runserver
 
 test:
-	pytest tests
+	py.test ./tests
 
 update_deps:
 	source ./venv/bin/activate; \

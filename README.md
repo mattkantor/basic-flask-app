@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/sunscrapers/flask-boilerplate.svg?branch=master)](https://travis-ci.org/sunscrapers/flask-boilerplate)
 
-# Flask Boilerplate
+# DogEar Server
 
 This repository contains a sample minimal Flask application structure that includes:
 
@@ -44,3 +44,6 @@ In order to run unit tests in py.test invoke:
 ## Contribution
 
 We are happy to see your way of scaffolding Flask applications. Feel free to submit an issue with your ideas or comments.
+
+## TODO
+https://github.com/singingwolfboy/flask-dance

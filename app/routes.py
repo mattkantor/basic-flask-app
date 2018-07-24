@@ -1,5 +1,6 @@
 from .api import apiv1
 from .api.news import *
+from .api.user import *
 
 class Route():
 
@@ -7,14 +8,14 @@ class Route():
         ''''''
 
     @staticmethod
-    def build( apiv1):
+    def build(apiv1):
 
 
-        apiv1.add_url_rule('/news','index', News.index, methods=['GET'])
-        apiv1.add_url_rule('/news', 'create', News.create, methods=['POST'])
+        apiv1.add_url_rule('/news','index', NewsController.index, methods=['GET'])
+        apiv1.add_url_rule('/news', 'create', NewsController.create, methods=['POST'])
 
-
-
+        apiv1.add_url_rule('/me', 'me', UserController.me, methods=['GET'])
+        apiv1.add_url_rule('/users', 'put', UserController.update, methods=['POST'])
 
 
         return apiv1

@@ -3,7 +3,7 @@ from . import apiv1
 
 
 
-class News():
+class NewsController():
     def __init__(self):
         ''''''
 
