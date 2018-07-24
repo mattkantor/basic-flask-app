@@ -18,9 +18,9 @@ class SQLAlchemyModelFactory(factory.Factory):
         return obj
 
 
-class DocumentFactory(SQLAlchemyModelFactory):
+class NewsFactory(SQLAlchemyModelFactory):
 
     class Meta:
-        model = Document
+        model = News
 
-    data = factory.LazyAttribute(lambda x: dict())
+    title = factory.LazyAttribute(lambda x: "Blahs")
