@@ -1,11 +1,14 @@
 from sqlalchemy import Column, Integer, String, Text
 from uuid import UUID
-from .dogear_model import DogearModel
+from .dogear_model import DogearMixin
+from flask.ext.migrate import Migrate
+from flask.ext.sqlalchemy import SQLAlchemy
 
+migrate = Migrate()
+db = SQLAlchemy()
 
-class News(DogearModel):
+class News(DogearMixin, db.Model):
     id = Column(Integer(), primary_key=True)
-    uuid = Column(String)
     title = Column(String)
     picture_url = Column(String)
     source = Column(String)
@@ -14,7 +17,7 @@ class News(DogearModel):
 
     def __init__(self, user_id, title, url, picture_url="", source=None):
         '''Create the new news artcile'''
-        super.__init__()
+        super().__init__()
         self.user_id=user_id
         self.title=title
         self.url = url
@@ -22,7 +25,7 @@ class News(DogearModel):
         self.source = source
 
     def __repr__(self):
-        return u'<News %s>'.format(self.title)
+        return u'<News %s, %s>'.format(self.title, self.url)
 
     def as_dict(self):
         data = {'id': self.id}

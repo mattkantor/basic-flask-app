@@ -1,14 +1,14 @@
+from sqlalchemy import Column, Integer, String, Text, DateTime, func
 from uuid import UUID
-from flask.ext.migrate import Migrate
-from flask.ext.sqlalchemy import SQLAlchemy
 
-migrate = Migrate()
-db = SQLAlchemy()
+from sqlalchemy.ext.declarative import declared_attr
 
-class DogearModel(db.Model):
 
-    def __init__(self):
-        ''''''
-        self.uuid = UUID.uuid4()
+
+class DogearMixin(object):
+
+    uuid = Column(String, primary_key=True)
+    created_at = Column(DateTime, default=func.now())
+
 
 
