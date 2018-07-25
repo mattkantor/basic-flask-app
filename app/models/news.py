@@ -15,6 +15,7 @@ class News(DogearMixin, db.Model):
     url = Column(Text)
     user_id = Column(Integer())
 
+
     def __init__(self, user_id, title, url, picture_url="", source=None):
         '''Create the new news artcile'''
         super().__init__()
@@ -32,3 +33,9 @@ class News(DogearMixin, db.Model):
         data = {'id': self.id}
         data.update(self.title)
         return data
+
+    @staticmethod
+    def validate(data):
+        if data["title"]==None or data["title"]=="":
+            return False
+        return True

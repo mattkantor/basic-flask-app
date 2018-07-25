@@ -2,6 +2,7 @@ from flask import request, jsonify
 from . import apiv1
 from ..models.news import News
 from app import db
+from ..schema.news_schema import *
 
 class NewsController():
     def __init__(self):
@@ -30,8 +31,9 @@ class NewsController():
                   description: Image representing the news item
 
                   '''
-        news = []
-        return jsonify({'news': news})
+
+        news = db.session.query(News).all()
+        return jsonify({'news': newses_schema.dump(news)})
 
     @staticmethod
     def create():
@@ -56,8 +58,13 @@ class NewsController():
                           description: Image representing the news item
 
                           '''
-        news = []
-        data  =  request.form
+        #todo validate
+        data = request.form
+        if not News.validate(data):
+            resp= jsonify({'message':'invalid record','news': None})
+            resp.status_code = 500
+            return resp
+
         news = News(title=data["title"], url=data["title"], user_id=1)
         db.session.add(news)
         db.session.commit()
