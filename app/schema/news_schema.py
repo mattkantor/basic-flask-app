@@ -8,6 +8,7 @@ class NewsSchema(ma.Schema):
         model = News
 
         fields = ('uuid','title', 'url')
+    uuid = fields.String()
     title = fields.String()
     url = fields.String()
     user_id = fields.Integer()

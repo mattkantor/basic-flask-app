@@ -9,9 +9,10 @@ from app.api.auth import *
 from .routes import Route
 from flasgger import Swagger
 from flask_marshmallow import Marshmallow
+from flask_login import LoginManager
+
 
 from flask import Flask, redirect, url_for
-
 
 
 from flask import jsonify
@@ -23,16 +24,17 @@ os.environ.setdefault(config_variable_name, default_config_path)
 os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")
 
 
+
 def create_app(config_file=None, settings_override=None):
     app = Flask(__name__)
     app.secret_key = "aldfkja;skdf"
 
     Swagger(app)
 
+    # flask-login
     api_routes = Route.build(apiv1)
     app.register_blueprint(api_routes, url_prefix='/api/v1')
     app.register_blueprint(github_blueprint, url_prefix="/login")
-
 
     if config_file:
         app.config.from_pyfile(config_file)
@@ -44,8 +46,6 @@ def create_app(config_file=None, settings_override=None):
 
     init_app(app)
 
-
-
     return app
 
 
@@ -53,7 +53,7 @@ def create_app(config_file=None, settings_override=None):
 def init_app(app):
     db.init_app(app)
     migrate.init_app(app, db)
-
+    login_manager = LoginManager(app)
 
 
     #api.init_app(app)

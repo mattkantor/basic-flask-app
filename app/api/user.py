@@ -3,6 +3,7 @@ from . import apiv1
 
 
 
+
 class UserController():
     def __init__(self):
         ''''''
@@ -27,7 +28,11 @@ class UserController():
                           type: base/64
                           description: your avatar'''
         news = []
-        return jsonify({'user': {'username':'@blurrycam','about':'Likes to paint and do drywall','geo':'Toronto ON Canada'}})
+        return jsonify({'user': 'current_user'})
+
+    @staticmethod
+    def search(**kwargs):
+        '''returns info afor users matching a search'''
 
     @staticmethod
     def update():
@@ -38,6 +43,4 @@ class UserController():
         '''allows me to login'''
         news = []
         return jsonify({'news': {"name":"hi"}})
-
-
 
