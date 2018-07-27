@@ -1,13 +1,11 @@
 from flask import request, jsonify
-from . import apiv1
-
-
+from . import apiv1, login_required
 
 
 class UserController():
     def __init__(self):
         ''''''
-
+    @login_required
     @staticmethod
     def me():
         '''my personal profile
@@ -31,10 +29,12 @@ class UserController():
         return jsonify({'user': 'current_user'})
 
     @staticmethod
+    @login_required
     def search(**kwargs):
         '''returns info afor users matching a search'''
 
     @staticmethod
+    @login_required
     def update():
         '''updates my personal info'''
 

@@ -1,3 +1,5 @@
+from functools import wraps
+
 from flask_dance.contrib.github import make_github_blueprint, github
 #from app import login_manager
 from app.models.user import User, db
@@ -14,21 +16,6 @@ github_blueprint = make_github_blueprint(
     )
 
 
-def auth():
-    auth_header = request.headers.get('Authorization')
-    if auth_header:
-        auth_token = auth_header.split(" ")[1]
-    else:
-        auth_token = ''
-
-    if auth_token:
-        resp = User.decode_auth_token(auth_token)
-        if not isinstance(resp, str):
-            user = User.query.filter_by(id=resp).first()
-            if user:
-                return True
-            else:
-                return False
 
 def get_auth_token():
     req_data = request.get_json()
@@ -102,3 +89,32 @@ def index():
     assert resp.ok
     return "You are @{login} on GitHub".format(login=resp.json()["login"])
 
+def login_required(function_to_wrap):
+    @wraps(function_to_wrap)
+    def wrap(*args, **kwargs):
+        a = False
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            auth_token = auth_header.split(" ")[1]
+        else:
+            auth_token = None
+            a = False
+
+        if auth_token:
+            resp = User.decode_auth_token(auth_token)
+            print(resp)
+            if not isinstance(resp, str):
+                user = User.query.filter_by(id=resp).first()
+                if user:
+                    a= True
+                else:
+                    a= False
+        else:
+            a=False
+
+        if a == True:
+            return function_to_wrap(*args, **kwargs)
+        else:
+            return jsonify({"Status":401, "message":"Not authenticated"})
+
+    return wrap
