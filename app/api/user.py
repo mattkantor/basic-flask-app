@@ -38,9 +38,5 @@ class UserController():
     def update():
         '''updates my personal info'''
 
-    @staticmethod
-    def login():
-        '''allows me to login'''
-        news = []
-        return jsonify({'news': {"name":"hi"}})
+
 

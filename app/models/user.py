@@ -4,17 +4,23 @@ from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBack
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash,check_password_hash
-from flask_login import UserMixin
-from flask_login import LoginManager
+import datetime
 import uuid
+import app
+import jwt
+import os
+import sys
+from flask import current_app as app
+
+
 
 
 migrate = Migrate()
 db = SQLAlchemy()
-login_manager = LoginManager()
 
 
-class User(UserMixin,db.Model):
+
+class User(db.Model):
     __tablename__ = 'users'
 
     id = Column(Integer(), primary_key=True)
@@ -22,21 +28,47 @@ class User(UserMixin,db.Model):
     username = Column(String)
     password = Column(String)
     email = Column(String)
-    # is_authenticated = Column(Boolean)
-    # is_active  =  Column(Boolean)
-    # is_anonymous =  Column(Boolean)
-
-    # @staticmethod
-    # def find_by_email(email):
-    #     user = db.session.query(User).find(User.email == email).get()
-    #     return user
 
     def __init__(self, email=email, username=username, password=""):
         self.uuid = str(uuid.uuid4())
         self.email = email
         self.username = username
 
+    def encode_auth_token(self, user_id):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
 
+            print( app.config["SECRET_KEY"], file=sys.stderr)
+            return jwt.encode(
+                payload,
+                app.config["SECRET_KEY"],
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Decodes the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, app.config["SECRET_KEY"])
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -44,9 +76,6 @@ class User(UserMixin,db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    @login_manager.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
 
     @staticmethod
     def validate(args):

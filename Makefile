@@ -6,7 +6,7 @@ init:
 	pip3 install -r requirements.txt; \
 
 run:
-	python3 manage.py runserver
+	python3 manage.py -c ../config/local.py runserver
 
 test:
 	py.test ./tests

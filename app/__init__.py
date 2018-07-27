@@ -1,33 +1,30 @@
 import os
 
 from celery import Celery
-from flask import Flask
-
 from app.models.news import migrate, db
 from app.api import apiv1
 from app.api.auth import *
 from .routes import Route
 from flasgger import Swagger
 from flask_marshmallow import Marshmallow
-from flask_login import LoginManager
-
+from flask_httpauth import HTTPBasicAuth
 
 from flask import Flask, redirect, url_for
 
 
-from flask import jsonify
-
 config_variable_name = 'FLASK_CONFIG_PATH'
 default_config_path = os.path.join(os.path.dirname(__file__), '../config/local.py')
 os.environ.setdefault(config_variable_name, default_config_path)
-
 os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")
 
+secret = os.environ.get("SECRET_KEY")
 
 
-def create_app(config_file=None, settings_override=None):
+
+def create_app(config=None, settings_override=None):
     app = Flask(__name__)
-    app.secret_key = "aldfkja;skdf"
+    app.debug = True
+
 
     Swagger(app)
 
@@ -36,8 +33,8 @@ def create_app(config_file=None, settings_override=None):
     app.register_blueprint(api_routes, url_prefix='/api/v1')
     app.register_blueprint(github_blueprint, url_prefix="/login")
 
-    if config_file:
-        app.config.from_pyfile(config_file)
+    if config:
+        app.config.from_pyfile(config)
     else:
         app.config.from_envvar(config_variable_name)
 
@@ -46,6 +43,8 @@ def create_app(config_file=None, settings_override=None):
 
     init_app(app)
 
+
+
     return app
 
 
@@ -53,7 +52,8 @@ def create_app(config_file=None, settings_override=None):
 def init_app(app):
     db.init_app(app)
     migrate.init_app(app, db)
-    login_manager = LoginManager(app)
+    auth = HTTPBasicAuth()
+
 
 
     #api.init_app(app)

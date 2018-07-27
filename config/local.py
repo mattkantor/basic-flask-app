@@ -6,6 +6,7 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/dogear'
 CELERY_BROKER_URL = 'sqla+postgresql://localhost/dogear'
 CELERY_TASK_SERIALIZER = 'json'
 OAUTHLIB_INSECURE_TRANSPORT=1
+SECRET_KEY="\x1d\x02\xfbq\xb5tz\xae\x01\xbf?4\xe4\xb4\x80A\xa7\xd0\xcbRX\xd5\x00\xda"
 CELERY_ACCEPT_CONTENT = ['json']
 CELERYBEAT_SCHEDULE = {
     'example_task': {

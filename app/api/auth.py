@@ -4,6 +4,8 @@ from app.models.user import User, db
 from flask import request, jsonify, redirect, url_for
 from flask_login import current_user, login_user, logout_user, LoginManager
 from . import apiv1
+import sys
+
 
 
 github_blueprint = make_github_blueprint(
@@ -12,15 +14,28 @@ github_blueprint = make_github_blueprint(
     )
 
 
-def login():
-    if current_user.is_authenticated:
-        return jsonify({"status":200, "message":"OK"})
+def auth():
+    auth_header = request.headers.get('Authorization')
+    if auth_header:
+        auth_token = auth_header.split(" ")[1]
+    else:
+        auth_token = ''
 
+    if auth_token:
+        resp = User.decode_auth_token(auth_token)
+        if not isinstance(resp, str):
+            user = User.query.filter_by(id=resp).first()
+            if user:
+                return True
+            else:
+                return False
 
+def get_auth_token():
     req_data = request.get_json()
 
     username = req_data['username']
     password = req_data['password']
+
 
     if username is None or username =="":
         return jsonify({"status": 400, "message": "no login params"})
@@ -29,9 +44,15 @@ def login():
     if user is None or not user.check_password(password):
 
         return jsonify({"status":404, "message":"Invalid login"})
-    #return jsonify({"status": 200, "message": "3"})
-    login_user(user, remember=True)
-    return jsonify({"status": 200, "message": "OK"})
+
+    auth_token = user.encode_auth_token(user.id)
+
+    responseObject = {
+        'status': 200,
+        'message': 'Token Enclosed.',
+        'auth_token': auth_token.decode()
+    }
+    return jsonify(responseObject)
 
 
 
@@ -50,10 +71,7 @@ def register():
     else:
         return jsonify({"status": 400, "message": valid_message})
 
-@apiv1.route('/logout')
-def logout():
-    logout_user()
-    return  jsonify({"status": 200, "message": "OK"})
+
 
 @github_blueprint.route("/github")
 def index():
