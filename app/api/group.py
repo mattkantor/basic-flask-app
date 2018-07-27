@@ -14,16 +14,13 @@ class GroupController():
     def index():
         '''show all groups'''
         groups = Group.query.filter(Group.user_id==g.user.id).all()
-
         return jsonify({"status":200, "groups":groups_schema.dump(groups)})
 
     @staticmethod
     @login_required
     def show(uuid):
         '''create a groups'''
-        
         group = Group.query.filter(Group.uuid == uuid).first()
-
         return jsonify({"status": 200, "message": "OK", "group": group_schema.dump(group)})
 
 

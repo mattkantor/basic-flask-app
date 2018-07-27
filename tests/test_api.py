@@ -1,37 +1,30 @@
 from tests import factories
 
+username="mattkantor"
+password = "password"
+email = "matthewkantor@msn.com"
 
-def test_get_should_return_bs_news(client, session):
+def test_should_create_a_new_valid_user(client, session):
 
-    response = client.get('/api/v1/news')
+    response = client.get('/api/v1/register', data=dict(username=username, password = password, email = email))
 
     assert response.status_code == 200
     assert len(response.json) == 1
 
-def test_get_should_create_news(client, session):
+def test_should_not_create_a_user(client, session):
 
-    response = client.post('/api/v1/news', data=dict(title="Test News", url="http://cbc.ca", picture_url="http://microsoft.com"))
+    response = client.post('/api/v1/register', data=dict(username="dddadsfas", email="fff@ff.com", password=""))
+    assert response.status_code != 200
+    response = client.post('/api/v1/register', data=dict(username="a;slKDJa", email="", password="dddadsfas"))
+    assert response.status_code != 200
+    response = client.post('/api/v1/register', data=dict(username="", email="joe@joe.com", password="dddadsfas"))
+    assert response.status_code != 200
 
-    assert response.status_code == 200
+def test_can_get_a_new_auth_token(client, session):
+    response = client.post('/api/v1/get_session_token',
+                           data=dict(username=username, password=password))
+
 
     assert len(response.json) == 1
-    assert response.json["news"]["title"] == "Test News"
+    assert len(response.json["token"])>50
 
-
-def test_get_did_create_a_bunch_of_news(client, session):
-    response = client.post('/api/v1/news',
-                           data=dict(title="Test News 2", url="http://cbc.ca", picture_url="http://microsoft.com"))
-    response = client.post('/api/v1/news',
-                           data=dict(title="Test News 3", url="http://bbc.co.uk", picture_url="http://microsoft.com"))
-    response = client.post('/api/v1/news',
-                           data=dict(title="Test News 4", url="this is not a url", picture_url="http://microsoft.com"))
-
-
-    response = client.get('/api/v1/news')
-    assert len(response.json["news"][0]) == 4
-
-def test_did_not_create_invalid_news_objects(client, session):
-    response = client.post('/api/v1/news',
-                           data=dict( url="Im not a url", picture_url="im also not a url"))
-
-    assert len(response.json["news"]) == 0
