@@ -6,6 +6,7 @@ from app.models.user import User, db
 from flask import request, jsonify, redirect, url_for
 
 from . import apiv1
+from .api_helper import  common_response
 import sys
 
 
@@ -20,26 +21,24 @@ github_blueprint = make_github_blueprint(
 def get_auth_token():
     req_data = request.get_json()
 
-    username = req_data['username']
+    #username = req_data['username']
     password = req_data['password']
+    email = req_data["email"]
 
 
-    if username is None or username =="":
-        return jsonify({"status": 400, "message": "no login params"})
+    if email is None or email =="":
+        return common_response(status=404, message="No login parameters")
 
-    user = User.query.filter(User.username==username).first()
+    user = User.query.filter(User.email==email).first()
     if user is None or not user.check_password(password):
 
-        return jsonify({"status":404, "message":"Invalid login"})
+        return common_response(status=401, message="Unauthorized")
 
-    auth_token = user.encode_auth_token(user.id)
-
-    responseObject = {
-        'status': 200,
-        'message': 'Token Enclosed.',
-        'auth_token': auth_token.decode()
-    }
-    return jsonify(responseObject)
+    auth_token = user.encode_auth_token()
+    g.user = user
+    #g.value.token=auth_token.decode()
+    print(auth_token.decode())
+    return common_response(token=auth_token.decode())
 
 
 
@@ -53,12 +52,15 @@ def register():
         user.set_password(req_data["password"])
         db.session.add(user)
         db.session.commit()
+        db.session.flush()
         user = User.query.filter(User.email==req_data["email"]).first()
-        auth_token = user.encode_auth_token(user.id)
-        return jsonify({"status":200, "message":"User Created", "token":auth_token.decode()})
+        auth_token = user.encode_auth_token()
+        #g.value.token = auth_token.decode()
+        g.user = user
+        return common_response( message="User Created")
 
     else:
-        return jsonify({"status": 400, "message": valid_message})
+        return common_response(status=400, message=valid_message, token="")
 
 
 
@@ -89,13 +91,17 @@ def index():
         return redirect(url_for("github.login"))
     resp = github.get("/user")
     assert resp.ok
-    return "You are @{login} on GitHub".format(login=resp.json()["login"])
+    return common_response(status=200, message="You are @{login} on GitHub".format(login=resp.json()["login"]))
+
 
 def login_required(function_to_wrap):
     @wraps(function_to_wrap)
     def wrap(*args, **kwargs):
         a = False
         auth_header = request.headers.get('Authorization')
+        print("-------")
+        print(auth_header)
+        print("-------")
         if auth_header:
             auth_token = auth_header.split(" ")[1]
         else:
@@ -103,21 +109,29 @@ def login_required(function_to_wrap):
             a = False
 
         if auth_token:
+
             resp = User.decode_auth_token(auth_token)
-            print(resp)
-            if not isinstance(resp, str):
-                user = User.query.filter_by(id=resp).first()
-                if user:
-                    a= True
-                else:
-                    a= False
+            print(type(resp))
+
+
+            user = User.query.filter(User.uuid==resp).first()
+
+
+
+            if user:
+                a=True
+                g.user = user
+
+            else:
+                a= False
         else:
             a=False
 
         if a == True:
-            g.user = user
+
             return function_to_wrap(*args, **kwargs)
         else:
-            return jsonify({"Status":401, "message":"Not authenticated"})
+            return common_response(status=401, message="Not authorized")
+
 
     return wrap

@@ -4,6 +4,7 @@ from app.models.group import Group
 from app.schema.group_schema import groups_schema, group_schema
 from . import apiv1, login_required
 from app import db
+from .api_helper import *
 
 class GroupController():
     def __init__(self):
@@ -14,15 +15,15 @@ class GroupController():
     def index():
         '''show all groups'''
         groups = Group.query.filter(Group.user_id==g.user.id).all()
-        return jsonify({"status":200, "groups":groups_schema.dump(groups)})
+        return common_response(object=groups_schema.dump(groups))
+
 
     @staticmethod
     @login_required
     def show(uuid):
         '''create a groups'''
         group = Group.query.filter(Group.uuid == uuid).first()
-        return jsonify({"status": 200, "message": "OK", "group": group_schema.dump(group)})
-
+        return common_response(object=group_schema.dump(group))
 
 
     @staticmethod
@@ -34,7 +35,8 @@ class GroupController():
         group = Group(name=name, user_id = g.user.id)
         db.session.add(group)
         db.session.commit()
-        return jsonify({"status":200, "message":"OK", "group":group_schema.dump(group)})
+        return common_response(object=group_schema.dump(group))
+
 
     @staticmethod
     @login_required

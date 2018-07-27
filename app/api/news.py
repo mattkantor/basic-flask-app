@@ -4,6 +4,7 @@ from ..models.news import News
 from app import db
 from .auth import login_required
 from ..schema.news_schema import *
+from .api_helper import *
 
 class NewsController():
     def __init__(self):
@@ -35,7 +36,7 @@ class NewsController():
                   '''
 
         news = db.session.query(News).all()
-        return jsonify({'news': newses_schema.dump(news)})
+        return common_response(object=newses_schema.dump(news))
 
 
     @staticmethod
@@ -66,13 +67,13 @@ class NewsController():
         req_data = request.get_json()
 
         if not News.validate(req_data):
-            resp= jsonify({'message':'invalid record','news': None})
-            resp.status_code = 500
-            return resp
+            return common_response(status=500,message='invalid record')
+
 
         news = News(title=req_data["title"], url=req_data["title"], user_id=g.user.id)
         db.session.add(news)
         db.session.commit()
-        return jsonify({'news': dict(title=req_data["title"], url=req_data["url"])})
+        return common_response(object=news_schema.dump(news))
+
 
 

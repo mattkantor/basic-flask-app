@@ -1,6 +1,6 @@
-from flask import request, jsonify
+from flask import request, jsonify, g
 from . import apiv1, login_required
-
+from .api_helper import *
 
 class UserController():
     def __init__(self):
@@ -26,7 +26,7 @@ class UserController():
                           type: base/64
                           description: your avatar'''
         news = []
-        return jsonify({'user': 'current_user'})
+        return common_response( object=g.user)
 
     @staticmethod
     @login_required
