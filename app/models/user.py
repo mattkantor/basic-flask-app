@@ -12,7 +12,7 @@ import os
 import sys
 from flask import current_app as app
 
-
+from .group import *
 
 
 migrate = Migrate()
@@ -22,17 +22,21 @@ db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'
+    __table_args__ = {"schema": "public"}
 
     id = Column(Integer(), primary_key=True)
     uuid = Column(String)
     username = Column(String)
     password = Column(String)
     email = Column(String)
+    #groups = relationship("Group")
 
     def __init__(self, email=email, username=username, password=""):
         self.uuid = str(uuid.uuid4())
         self.email = email
         self.username = username
+
+
 
     def encode_auth_token(self, user_id):
         """

@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, g
 from . import apiv1
 from ..models.news import News
 from app import db
@@ -63,15 +63,16 @@ class NewsController():
 
                           '''
         #todo validate
-        data = request.form
-        if not News.validate(data):
+        req_data = request.get_json()
+
+        if not News.validate(req_data):
             resp= jsonify({'message':'invalid record','news': None})
             resp.status_code = 500
             return resp
 
-        news = News(title=data["title"], url=data["title"], user_id=1)
+        news = News(title=req_data["title"], url=req_data["title"], user_id=g.user.id)
         db.session.add(news)
         db.session.commit()
-        return jsonify({'news': dict(title=data["title"], url=data["url"])})
+        return jsonify({'news': dict(title=req_data["title"], url=req_data["url"])})
 
 

@@ -1,10 +1,10 @@
 from functools import wraps
-
+from flask import g
 from flask_dance.contrib.github import make_github_blueprint, github
 #from app import login_manager
 from app.models.user import User, db
 from flask import request, jsonify, redirect, url_for
-from flask_login import current_user, login_user, logout_user, LoginManager
+
 from . import apiv1
 import sys
 
@@ -44,16 +44,18 @@ def get_auth_token():
 
 
 def register():
-    if current_user.is_authenticated:
-        return jsonify({"status":201, "message":"Already logged in"})
+
     req_data = request.get_json()
+
     valid, valid_message = User.validate(req_data)
     if valid:
         user = User(username=req_data["username"], email=req_data["email"])
         user.set_password(req_data["password"])
         db.session.add(user)
         db.session.commit()
-        return jsonify({"status":200, "message":"User Created"})
+        user = User.query.filter(User.email==req_data["email"]).first()
+        auth_token = user.encode_auth_token(user.id)
+        return jsonify({"status":200, "message":"User Created", "token":auth_token.decode()})
 
     else:
         return jsonify({"status": 400, "message": valid_message})
@@ -113,6 +115,7 @@ def login_required(function_to_wrap):
             a=False
 
         if a == True:
+            g.user = user
             return function_to_wrap(*args, **kwargs)
         else:
             return jsonify({"Status":401, "message":"Not authenticated"})
