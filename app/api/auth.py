@@ -37,7 +37,7 @@ def get_auth_token():
     auth_token = user.encode_auth_token()
     g.user = user
     #g.value.token=auth_token.decode()
-    print(auth_token.decode())
+
     return common_response(token=auth_token.decode())
 
 
@@ -99,9 +99,7 @@ def login_required(function_to_wrap):
     def wrap(*args, **kwargs):
         a = False
         auth_header = request.headers.get('Authorization')
-        print("-------")
-        print(auth_header)
-        print("-------")
+
         if auth_header:
             auth_token = auth_header.split(" ")[1]
         else:
