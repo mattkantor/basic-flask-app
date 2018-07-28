@@ -46,4 +46,5 @@ class NewsFactory(SQLAlchemyModelFactory):
         model = News
 
     title = factory.LazyAttribute(lambda x: "Blahs")
+
     uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))

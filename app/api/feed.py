@@ -64,7 +64,7 @@ class FeedController():
                           description: Image representing the news item
 
                           '''
-        
+
         req_data = request.get_json()
 
         news = Feed.search(q=req_data["q"], user_id=g.user.id)
