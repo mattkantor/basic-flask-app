@@ -1,12 +1,12 @@
 from flask import request, jsonify, g
 from . import apiv1
-from ..models.news import News
+from ..models.feed import Feed
 from app import db
 from .auth import login_required
 from ..schema.news_schema import *
 from .api_helper import *
 
-class NewsController():
+class FeedController():
     def __init__(self):
         ''''''
 
@@ -35,23 +35,14 @@ class NewsController():
 
                   '''
 
-        news = db.session.query(News).all()
-        return common_response(object=newses_schema.dump(news))
+        feed = db.session.query(Feed).all()
+        return common_response(object=newses_schema.dump(feed))
+
+
 
     @staticmethod
     @login_required
-    def share():
-        req_data = request.get_json()
-        news_id = req_data["news_id"]
-        group_ids_array = req_data["group_ids"]
-        for id in group_ids_array:
-
-            pass
-            #for each group id, get the users and send the feed item to their feed
-
-    @staticmethod
-    @login_required
-    def create():
+    def search():
         '''Create a news for a user
                 Call this api passing a user key
                 ---
@@ -73,17 +64,12 @@ class NewsController():
                           description: Image representing the news item
 
                           '''
-        #todo validate
+        
         req_data = request.get_json()
 
-        if not News.validate(req_data):
-            return common_response(status=500,message='invalid record')
+        news = Feed.search(q=req_data["q"], user_id=g.user.id)
 
-
-        news = News(title=req_data["title"], url=req_data["title"], user_id=g.user.id)
-        db.session.add(news)
-        db.session.commit()
-        return common_response(object=news_schema.dump(news))
+        return common_response(object=newses_schema.dump(news))
 
 
 

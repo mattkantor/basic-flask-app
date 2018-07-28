@@ -1,4 +1,6 @@
 from flask import request, jsonify, g
+
+from ..models.user import User
 from . import apiv1, login_required
 from .api_helper import *
 
@@ -26,7 +28,8 @@ class UserController():
                           type: base/64
                           description: your avatar'''
         news = []
-        return common_response( object=g.user)
+        user = User.query.filter(User.id == g.user.id)
+        return common_response( object=user)
 
     @staticmethod
     @login_required

@@ -15,6 +15,9 @@ update_deps:
 	source ./venv/bin/activate; \
 	pip install --upgrade -r requirements.txt; \
 
+fake:
+	python -m scripts/seed.py
+
 revision:
 	python manage.py db revision --autogenerate;
 

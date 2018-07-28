@@ -31,7 +31,7 @@ class User(db.Model):
     email = Column(String)
     #groups = relationship("Group")
 
-    def __init__(self, email=email, username=username, password=""):
+    def __init__(self, email=email, username="", password=""):
         self.uuid = str(uuid.uuid4())
         self.email = email
         self.username = username
@@ -85,23 +85,23 @@ class User(db.Model):
 
     @staticmethod
     def validate(args):
-        username = args["username"]
+
         email = args["email"]
         password = args["password"]
 
-        if username=="" or email =="" or password=="":
+        if  email =="" or password=="":
             return False, "Blank Fields"
-        if username==None or email ==None or password==None:
+        if email ==None or password==None:
             return False, "No Data Provided "
 
         #check user
         exists = User.query.filter(User.email==email).first()
         if exists:
             return False, "Duplicate Email"
-
-        exists2 = User.query.filter(User.username == username).first()
-        if exists2:
-            return False, "Username is already taken"
+        # if username:
+        #     exists2 = User.query.filter(User.username == username).first()
+        #     if exists2:
+        #         return False, "Username is already taken"
 
         return True, "OK"
 

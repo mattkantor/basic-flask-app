@@ -16,6 +16,9 @@ class News(DogearMixin, db.Model):
     url = Column(Text)
     user_id = Column(Integer())
 
+    #soft_delete
+    #flagged
+
 
     def __init__(self, user_id, title, url, picture_url="", source=None):
         '''Create the new news artcile'''

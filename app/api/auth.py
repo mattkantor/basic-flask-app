@@ -5,6 +5,7 @@ from flask_dance.contrib.github import make_github_blueprint, github
 from app.models.user import User, db
 from flask import request, jsonify, redirect, url_for
 
+from app.schema.user_schema import user_schema
 from . import apiv1
 from .api_helper import  common_response
 import sys
@@ -45,10 +46,11 @@ def get_auth_token():
 def register():
 
     req_data = request.get_json()
+    print(req_data)
 
     valid, valid_message = User.validate(req_data)
     if valid:
-        user = User(username=req_data["username"], email=req_data["email"])
+        user = User( email=req_data["email"])
         user.set_password(req_data["password"])
         db.session.add(user)
         db.session.commit()
@@ -57,7 +59,7 @@ def register():
         auth_token = user.encode_auth_token()
         #g.value.token = auth_token.decode()
         g.user = user
-        return common_response( message="User Created")
+        return common_response( message="User Created", object=user_schema.dumps(user),token=auth_token.decode())
 
     else:
         return common_response(status=400, message=valid_message, token="")
