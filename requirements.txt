@@ -10,7 +10,7 @@ flask-swagger
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.0
 Flask-Dance[sqla]
-flask-marshmallow
+marshmallow
 Flask-HTTPAuth
 requests
 pyjwt==1.6.4

@@ -14,7 +14,9 @@ class GroupController():
     def index():
         '''show all groups'''
         groups = Group.query.filter(Group.user_id==g.user.id).all()
-        return common_response(object=groups_schema.dump(groups))
+        data = groups_schema.dump(groups).data
+
+        return common_response(object=data)
 
 
     @staticmethod
@@ -22,7 +24,8 @@ class GroupController():
     def show(uuid):
         '''create a groups'''
         group = Group.query.filter(Group.uuid == uuid).first()
-        return common_response(object=group_schema.dump(group))
+        data=group_schema.dump(group).data
+        return common_response(object=data)
 
 
     @staticmethod
@@ -34,7 +37,8 @@ class GroupController():
         group = Group(name=name, user_id = g.user.id)
         db.session.add(group)
         db.session.commit()
-        return common_response(object=group_schema.dump(group))
+        data = group_schema.dump(group).data
+        return common_response(object=data)
 
 
     @staticmethod
@@ -49,8 +53,22 @@ class GroupController():
 
     @staticmethod
     @login_required
-    def add_user():
+    def add_user(uuid):
         '''add a user'''
+        req_data = request.get_json()
+        user_uuid = req_data["user_uuid"]
+        group = Group.query.filter(Group.uuid==uuid).first()
+        success = False
+        message="OK"
+        if group:
+            success, message = group.add_user_to_group(user_uuid)
+
+        if success==True:
+            status = 200
+        else:
+            status = 400
+
+        return common_response(status=status, message=message)
 
     @staticmethod
     @login_required

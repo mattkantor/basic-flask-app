@@ -27,9 +27,9 @@ class Group(DogearMixin, db.Model):
 
 
     def add_user_to_group(self,user_uuid):
-        pass
+        return True, "OK"
 
     def remove_user_to_group(self, user_uuid):
-        pass
+        return True, "OK"
 
 

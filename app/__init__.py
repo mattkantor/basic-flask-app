@@ -6,8 +6,8 @@ from app.api import apiv1
 from app.api.auth import *
 from .routes import Route
 from flasgger import Swagger
-from flask_marshmallow import Marshmallow
-from flask_httpauth import HTTPBasicAuth
+
+
 
 
 from flask import Flask, redirect, url_for
@@ -53,7 +53,7 @@ def create_app(config=None, settings_override=None):
 def init_app(app):
     db.init_app(app)
     migrate.init_app(app, db)
-    auth = HTTPBasicAuth()
+
 
 
 

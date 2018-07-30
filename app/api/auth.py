@@ -114,7 +114,7 @@ def login_required(function_to_wrap):
         if auth_token:
 
             resp = User.decode_auth_token(auth_token)
-            print(type(resp))
+
 
 
             user = User.query.filter(User.uuid==resp).first()

@@ -83,7 +83,7 @@ class NewsController():
         news = News(title=req_data["title"], url=req_data["title"], user_id=g.user.id)
         db.session.add(news)
         db.session.commit()
-        return common_response(object=news_schema.dump(news))
+        return common_response(object=news_schema.jsonify(news))
 
 
 

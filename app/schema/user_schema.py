@@ -1,9 +1,7 @@
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
-ma = Marshmallow()
+from marshmallow import Schema, fields
 from ..models.user import User
 
-class UserSchema(ma.Schema):
+class UserSchema(Schema):
     class Meta:
         model = User
 

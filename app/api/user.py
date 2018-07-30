@@ -1,5 +1,6 @@
 from flask import request, jsonify, g
 
+from app.schema.user_schema import user_schema
 from ..models.user import User
 from . import apiv1, login_required
 from .api_helper import *
@@ -29,7 +30,7 @@ class UserController():
                           description: your avatar'''
         news = []
         user = User.query.filter(User.id == g.user.id)
-        return common_response( object=user)
+        return common_response( user_schema.dump(user))
 
     @staticmethod
     @login_required

@@ -1,9 +1,9 @@
-from flask_marshmallow import Marshmallow
-from marshmallow import fields
-ma = Marshmallow()
+
+from marshmallow import Schema, fields
+
 from ..models.group import Group
 
-class GroupSchema(ma.Schema):
+class GroupSchema(Schema):
     class Meta:
         model = Group
 
