@@ -30,7 +30,7 @@ def setup_user(client, session):
     return token
 
 def get_token(client, session):
-
+    setup_user(client, session)
     headers = {
         'Content-Type': mimetype,
         'Accept': mimetype

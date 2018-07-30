@@ -4,22 +4,19 @@ import uuid
 from sqlalchemy.orm import relationship
 
 from .dogear_model import DogearMixin
-from flask.ext.migrate import Migrate
-from flask.ext.sqlalchemy import SQLAlchemy
 from .user import *
+from app.models import db
 from sqlalchemy.dialects.postgresql import ARRAY
 
-migrate = Migrate()
-db = SQLAlchemy()
+
 
 class Group(DogearMixin, db.Model):
 
     __tablename__ = "groups"
 
-
     id = Column(Integer(), primary_key=True)
     name = Column(String)
-    user_id = Column(Integer, ForeignKey('groups.user_id'),nullable=False)
+    user_id = Column(Integer, nullable=False)
     #user_ids = Column(ARRAY(Integer))
     #user = relationship('User')
 

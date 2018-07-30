@@ -1,13 +1,14 @@
 import os
 
 from celery import Celery
-from app.models.news import migrate, db
+from app.models import migrate, db
 from app.api import apiv1
 from app.api.auth import *
 from .routes import Route
 from flasgger import Swagger
 from flask_marshmallow import Marshmallow
 from flask_httpauth import HTTPBasicAuth
+
 
 from flask import Flask, redirect, url_for
 
@@ -74,3 +75,5 @@ def create_celery_app(app=None):
 
     celery.Task = ContextTask
     return celery
+
+#from app.models import *

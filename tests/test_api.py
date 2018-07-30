@@ -3,9 +3,9 @@ from pytest import skip
 from tests import factories
 from flask import json
 
-username="mattskantor"
+username="mattskasntor"
 password = "passsword"
-email = "matthewskantor@msn.com"
+email = "matthewdskantor@msn.com"
 
 mimetype = 'application/json'
 headers = {
@@ -16,13 +16,13 @@ headers = {
 def test_should_create_a_new_valid_user(client, session):
     factories.UserFactory.create_batch(10)
 
-    #todo this is throwing a 400 when a duplicate user is found in the DB..Also implies teardown not working?
+
 
     response = client.get('/api/v1/register', headers=headers,
                           data=json.dumps({"username": username, "password": password, "email": email}))
 
-    assert response.status_code == 400
-    assert False
+    assert response.status_code == 200
+
 
 
 def test_should_not_create_a_user(client, session):

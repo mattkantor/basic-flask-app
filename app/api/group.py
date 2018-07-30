@@ -1,9 +1,8 @@
 from flask import request, jsonify
 from flask import g
-from app.models.group import Group
 from app.schema.group_schema import groups_schema, group_schema
 from . import apiv1, login_required
-from app import db
+from app.models import *
 from .api_helper import *
 
 class GroupController():

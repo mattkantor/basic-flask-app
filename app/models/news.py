@@ -1,14 +1,13 @@
 from sqlalchemy import Column, Integer, String, Text
 import uuid
-from .dogear_model import DogearMixin
-from flask.ext.migrate import Migrate
-from flask.ext.sqlalchemy import SQLAlchemy
 
-migrate = Migrate()
-db = SQLAlchemy()
+from app.models import db
+from .dogear_model import DogearMixin
+
 
 class News(DogearMixin, db.Model):
     __tablename__ = 'news'
+
     id = Column(Integer(), primary_key=True)
     title = Column(String)
     picture_url = Column(String)

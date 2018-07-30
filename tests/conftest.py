@@ -1,10 +1,10 @@
 import pytest
 import sys
 from app import create_app
-from app.models.news import db as _db
+
 from tests.client import ApiTestingResponse
 
-print("loaded conftest", sys.stdout)
+
 
 @pytest.yield_fixture(scope='session')
 def app():
@@ -19,15 +19,16 @@ def app():
     ctx.pop()
 
 
-@pytest.yield_fixture(scope='session')
+@pytest.fixture(scope='session')
 def db(app):
     #_db.drop_all()
-    print("dbcreate", sys.stderr)
+
+    from app.models import db as _db
+
+
     _db.drop_all()
     _db.create_all()
-    #return _db
-
-    yield _db
+    return _db
 
 
     #print("db done", sys.stderr)

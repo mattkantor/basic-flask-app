@@ -1,7 +1,6 @@
-from flask.ext.migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
+
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
@@ -12,20 +11,18 @@ import os
 import sys
 from flask import current_app as app
 
-from .group import *
-
-
-migrate = Migrate()
-db = SQLAlchemy()
+from app.models import db
+from .dogear_model import DogearMixin
 
 
 
-class Feed(db.Model, DogearMixin):
+
+
+class Feed( DogearMixin,db.Model):
     __tablename__ = 'feed'
-    __table_args__ = {"schema": "public"}
+
 
     id = Column(Integer(), primary_key=True)
-    uuid = Column(String())
     from_user_id = Column(Integer())
     user_id = Column(Integer())
     from_group_id = Column(Integer())

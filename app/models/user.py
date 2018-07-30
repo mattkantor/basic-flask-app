@@ -2,6 +2,7 @@ from flask.ext.migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
@@ -12,20 +13,13 @@ import os
 import sys
 from flask import current_app as app
 
-from .group import *
+from app.models import DogearMixin, db
 
 
-migrate = Migrate()
-db = SQLAlchemy()
-
-
-
-class User(db.Model):
+class User( DogearMixin,db.Model):
     __tablename__ = 'users'
 
-
     id = Column(Integer(), primary_key=True)
-    uuid = Column(String)
     username = Column(String)
     password = Column(String)
     email = Column(String)
@@ -111,7 +105,4 @@ class User(db.Model):
         #check_password_hash(hash, 'foobar')
 
 
-class OAuth(OAuthConsumerMixin, db.Model):
-    user_id = Column(Integer, ForeignKey(User.id))
-    user = relationship(User)
 
