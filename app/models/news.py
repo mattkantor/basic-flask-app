@@ -64,6 +64,8 @@ class News(DogearMixin, db.Model):
 
         if data["title"]==None or data["title"]=="":
             return False
+
+
         #todo check for unique
         return True
 

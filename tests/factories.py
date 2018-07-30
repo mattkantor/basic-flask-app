@@ -2,6 +2,7 @@ import factory
 import uuid
 
 import pytest
+from factory import PostGenerationMethodCall
 from faker import Faker
 from app.models.user import User
 from app.models.group import Group
@@ -29,10 +30,10 @@ class UserFactory(SQLAlchemyModelFactory):
     class Meta:
         model = User
 
-    username = factory.LazyAttribute(lambda x: faker.first_name())
+    username = factory.LazyAttribute(lambda x: faker.first_name()+ faker.last_name())
     #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     email = factory.LazyAttribute(lambda x: faker.email())
-    password = factory.LazyAttribute(lambda x: User().set_password("Blahs"))
+    password = PostGenerationMethodCall('set_password', 'password')#factory.LazyAttribute(lambda x: x.set_password("Blahs"))
 
 class GroupFactory(SQLAlchemyModelFactory):
     class Meta:

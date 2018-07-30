@@ -19,7 +19,7 @@ def app():
     ctx.pop()
 
 
-@pytest.fixture(scope='session')
+@pytest.yield_fixture(scope='session')
 def db(app):
     #_db.drop_all()
 
@@ -28,7 +28,8 @@ def db(app):
 
     _db.drop_all()
     _db.create_all()
-    return _db
+    yield _db
+    _db.drop_all()
 
 
     #print("db done", sys.stderr)

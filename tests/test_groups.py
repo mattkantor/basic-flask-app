@@ -32,10 +32,7 @@ def setup_user(client, session):
     return token
 
 def get_token(client, session):
-    try:
-        setup_user(client, session)
-    except:
-        pass
+
 
     headers = {
         'Content-Type': mimetype,
@@ -57,6 +54,11 @@ def test_add_group_without_auth(client, session):
 
 
 def test_add_a_new_group(client, session):
+
+    try:
+        setup_user(client, session)
+    except:
+        pass
 
     token = get_token(client, session)
     headers = {

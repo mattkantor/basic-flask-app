@@ -3,12 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
 import uuid
 import app
 import jwt
+import re
 import os
 import sys
 from flask import current_app as app
@@ -22,14 +23,13 @@ class User( DogearMixin,db.Model):
     id = Column(Integer(), primary_key=True)
     username = Column(String)
     password = Column(String)
-    email = Column(String)
+    email = Column(String, unique=True)
     #groups = relationship("Group")
 
     def __init__(self, email=email, username="", password=""):
         self.uuid = str(uuid.uuid4())
         self.email = email
         self.username = username
-
 
 
     def encode_auth_token(self):
@@ -71,38 +71,34 @@ class User( DogearMixin,db.Model):
             return 'Invalid token. Please log in again.'
 
     def set_password(self, password):
+        if not password:
+            raise AssertionError('Password is required to sign up')
+
+        # if not re.match('\d.*[A-Z]|[A-Z].*\d', password):
+        #     raise AssertionError('Password must contain 1 capital letter and 1 number')
+
+        if len(password) < 6 or len(password) > 50:
+            raise AssertionError('Your Password must be between 6 and 50 characters')
+
+
+
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    @validates('email')
+    def validate_email(self, key, email):
+        if not email:
+            raise AssertionError('No email provided')
 
-    @staticmethod
-    def validate(args):
-        print(args)
+        if not re.match("[^@]+@[^@]+\.[^@]+", email):
+            raise AssertionError('Provided email is not an email address')
 
-        email = args["email"]
-        password = args["password"]
-
-        if  email =="" or password=="":
-            return False, "Blank Fields"
-        if email ==None or password==None:
-            return False, "No Data Provided "
-
-        #check user
-        exists = User.query.filter(User.email==email).first()
-        if exists:
-            return False, "Duplicate Email"
-        # if username:
-        #     exists2 = User.query.filter(User.username == username).first()
-        #     if exists2:
-        #         return False, "Username is already taken"
-
-        return True, "OK"
+        return email
 
 
 
-        #check_password_hash(hash, 'foobar')
 
 
 
