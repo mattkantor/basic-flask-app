@@ -1,4 +1,5 @@
 alembic==0.8.0
+BeautifulSoup4
 celery==3.1.18
 factory-boy==2.5.2
 Faker

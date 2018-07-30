@@ -35,8 +35,8 @@ class NewsController():
 
                   '''
 
-        news = db.session.query(News).all()
-        return common_response(object=newses_schema.dump(news))
+        news = db.session.query(News).order_by("created_at desc").all()
+        return common_response(object=newses_schema.dump(news).data)
 
     @staticmethod
     @login_required
@@ -80,10 +80,11 @@ class NewsController():
             return common_response(status=500,message='invalid record')
 
 
-        news = News(title=req_data["title"], url=req_data["title"], user_id=g.user.id)
+        news = News(title=req_data["title"], url=req_data["url"], user_id=g.user.id)
         db.session.add(news)
         db.session.commit()
-        return common_response(object=news_schema.jsonify(news))
+
+        return common_response(object=news_schema.dump(news).data)
 
 
 

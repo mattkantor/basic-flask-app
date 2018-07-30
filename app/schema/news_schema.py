@@ -5,10 +5,11 @@ class NewsSchema(Schema):
     class Meta:
         model = News
 
-        fields = ('uuid','title', 'url')
+        fields = ('uuid','title', 'url','picture_url')
     uuid = fields.String()
     title = fields.String()
     url = fields.String()
+    picture_url = fields.String()
     user_id = fields.Integer()
 
     # Smart hyperlinking
