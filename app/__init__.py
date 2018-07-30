@@ -22,7 +22,7 @@ secret = os.environ.get("SECRET_KEY")
 
 
 
-def create_app(config=None, settings_override=None):
+def create_app(config="../config/local.py", settings_override=None):
     app = Flask(__name__)
     app.debug = True
 

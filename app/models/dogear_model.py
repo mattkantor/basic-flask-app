@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declared_attr
 
 class DogearMixin(object):
 
-    uuid = Column(String, primary_key=True)
+    uuid = Column(String)
     created_at = Column(DateTime, default=func.now())
 
 

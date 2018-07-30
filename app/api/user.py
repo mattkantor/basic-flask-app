@@ -8,8 +8,9 @@ from .api_helper import *
 class UserController():
     def __init__(self):
         ''''''
-    @login_required
+
     @staticmethod
+    @login_required
     def me():
         '''my personal profile
                 ---
@@ -29,8 +30,9 @@ class UserController():
                           type: base/64
                           description: your avatar'''
         news = []
-        user = User.query.filter(User.id == g.user.id)
-        return common_response( user_schema.dump(user))
+        user = User.query.filter(User.id == g.user.id).first()
+
+        return common_response( object=user_schema.dump(user).data)
 
     @staticmethod
     @login_required

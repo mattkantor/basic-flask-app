@@ -16,7 +16,7 @@ update_deps:
 	pip install --upgrade -r requirements.txt; \
 
 fake:
-	python -m scripts/seed.py
+	python -m seed.seed
 
 revision:
 	python manage.py db revision --autogenerate;
