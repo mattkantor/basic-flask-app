@@ -15,12 +15,12 @@ db = SQLAlchemy()
 class Group(DogearMixin, db.Model):
 
     __tablename__ = "groups"
-    __table_args__ = {"schema": "public"}
+
 
     id = Column(Integer(), primary_key=True)
     name = Column(String)
-    user_id = Column(Integer, ForeignKey('public.groups.user_id'),nullable=False)
-    user_ids = Column(ARRAY(Integer))
+    user_id = Column(Integer, ForeignKey('groups.user_id'),nullable=False)
+    #user_ids = Column(ARRAY(Integer))
     #user = relationship('User')
 
     def __init__(self, name=name, user_id=user_id):

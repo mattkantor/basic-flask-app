@@ -27,7 +27,7 @@ class UserFactory(SQLAlchemyModelFactory):
         model = User
 
     username = factory.LazyAttribute(lambda x: "Blahs")
-    uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
+    #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     email = factory.LazyAttribute(lambda x: "Blahs")
     password = factory.LazyAttribute(lambda x: User().set_password("Blahs"))
 
@@ -36,7 +36,7 @@ class GroupFactory(SQLAlchemyModelFactory):
         model = User
 
     name = factory.LazyAttribute(lambda x: "Blahs")
-    uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
+    #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     #TODO will break
     user_id = factory.LazyAttribute(lambda x: 1)
 

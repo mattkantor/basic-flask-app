@@ -22,7 +22,7 @@ db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = 'users'
-    __table_args__ = {"schema": "public"}
+
 
     id = Column(Integer(), primary_key=True)
     uuid = Column(String)
@@ -85,6 +85,7 @@ class User(db.Model):
 
     @staticmethod
     def validate(args):
+        print(args)
 
         email = args["email"]
         password = args["password"]

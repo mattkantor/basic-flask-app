@@ -46,21 +46,24 @@ def get_auth_token():
 def register():
 
     req_data = request.get_json()
-    print(req_data)
+
 
     valid, valid_message = User.validate(req_data)
-    if valid:
-        user = User( email=req_data["email"])
-        user.set_password(req_data["password"])
-        db.session.add(user)
-        db.session.commit()
-        db.session.flush()
-        user = User.query.filter(User.email==req_data["email"]).first()
-        auth_token = user.encode_auth_token()
-        #g.value.token = auth_token.decode()
-        g.user = user
-        return common_response( message="User Created", object=user_schema.dumps(user),token=auth_token.decode())
 
+    if valid:
+        try:
+            user = User( email=req_data["email"])
+            user.set_password(req_data["password"])
+            db.session.add(user)
+            db.session.commit()
+            db.session.flush()
+            user = User.query.filter(User.email==req_data["email"]).first()
+            auth_token = user.encode_auth_token()
+            #g.value.token = auth_token.decode()
+            g.user = user
+            return common_response( message="User Created", object=user_schema.dumps(user),token=auth_token.decode())
+        except :
+            return common_response(status=400, message="Could not create new user", token="")
     else:
         return common_response(status=400, message=valid_message, token="")
 
