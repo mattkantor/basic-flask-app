@@ -23,6 +23,13 @@ class Route():
 
         apiv1.add_url_rule('/me', 'me', UserController.me, methods=['GET'])
         apiv1.add_url_rule('/users', 'put', UserController.update, methods=['POST'])
+        apiv1.add_url_rule('/users/<string:uuid>', 'show', UserController.show, methods=['GET'])
+        apiv1.add_url_rule('/users/search', 'search', UserController.search, methods=['GET'])
+
+        apiv1.add_url_rule('/follow/<string:uuid>', 'follow', UserController.follow, methods=['GET'])
+        apiv1.add_url_rule('/unfollow/<string:uuid>', 'unfollow', UserController.unfollow, methods=['GET'])
+        apiv1.add_url_rule('/followers', 'followers', UserController.followers, methods=['GET'])
+        apiv1.add_url_rule('/following', 'following', UserController.following, methods=['GET'])
 
         apiv1.add_url_rule('/groups', 'groups', GroupController.index, methods=['GET'])
         apiv1.add_url_rule('/groups', 'create_group', GroupController.create, methods=['POST'])
@@ -33,8 +40,8 @@ class Route():
         apiv1.add_url_rule('/groups/<string:uuid>/add_user', 'add_user', GroupController.add_user, methods=['POST'])
 
         #
-        apiv1.add_url_rule('/get_auth_token', 'get_auth_token', get_auth_token,methods=['GET', 'POST'])
-        apiv1.add_url_rule('/register', 'register', register, methods=['GET', 'POST'])
+        apiv1.add_url_rule('/get_auth_token', 'get_auth_token', get_auth_token,methods=[ 'POST'])
+        apiv1.add_url_rule('/register', 'register', register, methods=[ 'POST'])
 
         apiv1.add_url_rule('/feed', 'feed', FeedController.index, methods=['GET'])
         apiv1.add_url_rule('/feed', 'search_feed', FeedController.index, methods=['POST'])

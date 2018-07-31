@@ -7,3 +7,4 @@ from .feed import *
 from .news import *
 from .user import *
 from .group import *
+from .follow import *

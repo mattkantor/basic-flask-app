@@ -45,5 +45,3 @@ In order to run unit tests in py.test invoke:
 
 We are happy to see your way of scaffolding Flask applications. Feel free to submit an issue with your ideas or comments.
 
-## TODO
-https://github.com/singingwolfboy/flask-dance

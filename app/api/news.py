@@ -79,12 +79,15 @@ class NewsController():
         if not News.validate(req_data):
             return common_response(status=500,message='invalid record')
 
+        try:
+            news = News(title=req_data["title"], url=req_data["url"], user_id=g.user.id)
+            db.session.add(news)
+            db.session.commit()
+            return common_response(object=news_schema.dump(news).data)
 
-        news = News(title=req_data["title"], url=req_data["url"], user_id=g.user.id)
-        db.session.add(news)
-        db.session.commit()
-
-        return common_response(object=news_schema.dump(news).data)
+        except AssertionError as message:
+            db.session.rollback()
+            return common_response(status=400, message=message, token="")
 
 
 

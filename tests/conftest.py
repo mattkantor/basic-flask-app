@@ -2,6 +2,7 @@ import pytest
 import sys
 from app import create_app
 
+
 from tests.client import ApiTestingResponse
 
 
@@ -26,8 +27,9 @@ def db(app):
     from app.models import db as _db
 
 
-    _db.drop_all()
+    #_db.drop_all()
     _db.create_all()
+
     yield _db
     _db.drop_all()
 

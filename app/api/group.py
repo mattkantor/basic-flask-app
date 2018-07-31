@@ -45,11 +45,13 @@ class GroupController():
     @login_required
     def update():
         '''create a groups'''
+        return common_response(status=200, message="OK")
 
     @staticmethod
     @login_required
     def delete():
         '''create a groups'''
+        return common_response(status=200, message="OK")
 
     @staticmethod
     @login_required
@@ -60,18 +62,22 @@ class GroupController():
         group = Group.query.filter(Group.uuid==uuid).first()
         success = False
         message="OK"
-        if group:
-            success, message = group.add_user_to_group(user_uuid)
+        try:
+            if group:
+                success, message = group.add_user_to_group(user_uuid)
 
-        if success==True:
-            status = 200
-        else:
-            status = 400
+            if success==True:
+                status = 200
+            else:
+                status = 400
 
-        return common_response(status=status, message=message)
+            return common_response(status=status, message=message)
+        except AssertionError as message:
+            db.session.rollback()
+            return common_response(status=400, message=message, token="")
 
     @staticmethod
     @login_required
     def remove_user():
         '''remove user from group'''
-
+        return common_response(status=200, message="OK")

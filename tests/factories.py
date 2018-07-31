@@ -10,6 +10,12 @@ from app.models.news import db, News
 
 faker = Faker()
 
+def get_authable_email():
+    return "matt.kantor@gmail.com"
+
+def get_authable_username():
+    return "mattkantor"
+
 
 class SQLAlchemyModelFactory(factory.Factory):
 
@@ -20,10 +26,27 @@ class SQLAlchemyModelFactory(factory.Factory):
     def _create(cls, model_class, *args, **kwargs):
         session = db.session
         session.begin(nested=True)
+        session.query(model_class).delete()
         obj = model_class(*args, **kwargs)
+
+
         session.add(obj)
         session.commit()
         return obj
+
+
+
+class MeFactory(SQLAlchemyModelFactory):
+    pass
+    class Meta:
+        model = User
+
+    username = factory.LazyAttribute(lambda x: get_authable_username())
+    #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
+    email = factory.LazyAttribute(lambda x: get_authable_email())
+    password = PostGenerationMethodCall('set_password', 'password')
+
+
 
 
 class UserFactory(SQLAlchemyModelFactory):
@@ -33,7 +56,9 @@ class UserFactory(SQLAlchemyModelFactory):
     username = factory.LazyAttribute(lambda x: faker.first_name()+ faker.last_name())
     #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     email = factory.LazyAttribute(lambda x: faker.email())
-    password = PostGenerationMethodCall('set_password', 'password')#factory.LazyAttribute(lambda x: x.set_password("Blahs"))
+    password = PostGenerationMethodCall('set_password', 'password')#
+
+
 
 class GroupFactory(SQLAlchemyModelFactory):
     class Meta:
@@ -43,6 +68,8 @@ class GroupFactory(SQLAlchemyModelFactory):
     #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     #TODO will break
     user_id = factory.LazyAttribute(lambda x: 1)
+
+
 #
 # class NewsFactory(SQLAlchemyModelFactory):
 #

@@ -45,7 +45,11 @@ def get_auth_token():
 
 def register():
 
-    req_data = request.get_json()
+    req_data = request.get_json(force=True)
+    print("---------")
+    print(req_data)
+
+    print(req_data["email"])
 
 
     try:
@@ -86,9 +90,7 @@ def index():
               default: None
             image:
               type: base/64
-              description: Image representing the news item
-
-              '''
+              description: Image representing the news item'''
     if not github.authorized:
         return redirect(url_for("github.login"))
     resp = github.get("/user")

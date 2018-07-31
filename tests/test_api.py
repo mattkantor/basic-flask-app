@@ -1,7 +1,11 @@
 from pytest import skip
+from sqlalchemy.testing.config import skip_test
 
+from app import User
 from tests import factories
 from flask import json
+
+from tests.factories import get_authable_email
 
 username="mattskasntor"
 password = "passsword"
@@ -13,12 +17,13 @@ headers = {
     'Accept': mimetype
 }
 
+
+
 def test_should_create_a_new_valid_user(client, session):
-    factories.UserFactory.create_batch(10)
+    #factories.MeFactory.create_batch(1)
 
 
-
-    response = client.get('/api/v1/register', headers=headers,
+    response = client.post('/api/v1/register', headers=headers,
                           data=json.dumps({"username": username, "password": password, "email": email}))
 
     assert response.status_code == 200
@@ -36,10 +41,12 @@ def test_should_not_create_a_user(client, session):
 
 
 def test_can_get_a_new_auth_token(client, session):
+    factories.MeFactory.create_batch(1)
+
     response = client.post('/api/v1/get_auth_token',headers=headers,
-                           data=json.dumps({"email":email, "password":password}))
+                           data=json.dumps({"email":get_authable_email(), "password":"password"}))
 
 
 
     assert len(response.json["token"])>50
-
+#
