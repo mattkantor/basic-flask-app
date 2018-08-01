@@ -1,12 +1,10 @@
 from app.api.feed import FeedController
+from app.api.follows import FollowController
 from .api import apiv1
 from .api.news import *
 from .api.user import *
 from .api.group import *
 from .api.auth import get_auth_token, register
-
-
-
 
 
 class Route():
@@ -26,10 +24,10 @@ class Route():
         apiv1.add_url_rule('/users/<string:uuid>', 'show', UserController.show, methods=['GET'])
         apiv1.add_url_rule('/users/search', 'search', UserController.search, methods=['GET'])
 
-        apiv1.add_url_rule('/follow/<string:uuid>', 'follow', UserController.follow, methods=['GET'])
-        apiv1.add_url_rule('/unfollow/<string:uuid>', 'unfollow', UserController.unfollow, methods=['GET'])
-        apiv1.add_url_rule('/followers', 'followers', UserController.followers, methods=['GET'])
-        apiv1.add_url_rule('/following', 'following', UserController.following, methods=['GET'])
+        apiv1.add_url_rule('/follow/<string:uuid>', 'follow', FollowController.follow, methods=['GET'])
+        apiv1.add_url_rule('/unfollow/<string:uuid>', 'unfollow', FollowController.unfollow, methods=['GET'])
+        apiv1.add_url_rule('/followers', 'followers', FollowController.followers, methods=['GET'])
+        apiv1.add_url_rule('/following', 'following', FollowController.following, methods=['GET'])
 
         apiv1.add_url_rule('/groups', 'groups', GroupController.index, methods=['GET'])
         apiv1.add_url_rule('/groups', 'create_group', GroupController.create, methods=['POST'])

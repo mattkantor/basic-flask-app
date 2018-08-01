@@ -23,10 +23,10 @@ class Feed( DogearMixin,db.Model):
 
 
     id = Column(Integer(), primary_key=True)
-    from_user_id = Column(Integer())
-    user_id = Column(Integer())
-    from_group_id = Column(Integer())
-    news_id = Column(Integer())
+    from_user_id = Column(Integer(), nullable=False)
+    user_id = Column(Integer(),nullable=False)
+    from_group_id = Column(Integer(),nullable=False)
+    news_id = Column(Integer(),nullable=False)
 
 
     def __init__(self, from_user_id=from_user_id, from_group_id=from_group_id, user_id=user_id, news_id=news_id):
