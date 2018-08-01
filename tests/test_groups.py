@@ -24,17 +24,12 @@ headers = {
 
 
 
-
-
-
-
-
 def test_add_group_without_auth(client, session):
     factories.UserFactory.cleanup()
     factories.MeFactory.create_batch(1)
 
     response = client.post('/api/v1/groups', data=json.dumps({"name":"test"}), headers = headers)
-    print(response.json)
+
     assert response.status_code !=200
 
 
@@ -55,8 +50,13 @@ def test_add_a_new_group(client, session):
 
 def test_get_my_groups(client, session):
     factories.UserFactory.cleanup()
-    factories.MeFactory.create_batch(1)
-    factories.GroupFactory._create_batch(3)
+    factories.GroupFactory.cleanup()
+
+    me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
+
+
+    #factories.GroupFactory._create_batch(3)
+
     token = get_token(client, session)
     headers = {
         'Content-Type': mimetype,
@@ -64,19 +64,23 @@ def test_get_my_groups(client, session):
         "Authorization": "Bearer " + token
     }
 
+    #first create a group
     client.post('/api/v1/groups', data=json.dumps({"name": "test mygroup"}), headers=headers)
+
+    #now get it
     response = client.get('/api/v1/groups',headers = headers)
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
     factories.UserFactory.cleanup()
 
 
-@skip("none")
 def test_add_user_to_group(client, session):
     factories.UserFactory.cleanup()
-    factories.MeFactory.create_batch(1)
-    factories.GroupFactory.create_batch(3)
-    user = User.query.first()
+    factories.GroupFactory.cleanup()
+    me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
+    users = factories.UserFactory.create_batch(3)
+    group = factories.GroupFactory(user_id=me.id, name="my test groupio") #pass in userid
+
 
     token = get_token(client, session)
     headers = {
@@ -84,22 +88,20 @@ def test_add_user_to_group(client, session):
         'Accept': mimetype,
         "Authorization": "Bearer " + token
     }
-    response = client.get('/api/v1/groups', headers=headers)
+    # response = client.get('/api/v1/groups/' + group.uuid, headers=headers)
+    #
+    #
+    #
+    # group_id = group.uuid
+    # headers = {
+    #     'Content-Type': mimetype,
+    #     'Accept': mimetype,
+    #     "Authorization": "Bearer " + token
+    # }
+    data = json.dumps({"user_uuid":users[0].uuid})
+    grp_url = '/api/v1/groups/'+str(group.uuid)+'/add_user'
 
-    group0 = response.json["data"]
-    print(group0)
 
-
-    group_id = group0['uuid']
-    headers = {
-        'Content-Type': mimetype,
-        'Accept': mimetype,
-        "Authorization": "Bearer " + token
-    }
-    data = json.dumps({"user_uuid":user.uuid})
-    grp_url = '/api/v1/groups/'+str(group_id)+'/add_user'
-
-    print(grp_url)
     response = client.post(grp_url,headers = headers, data = data)
     assert response.status_code == 200
 

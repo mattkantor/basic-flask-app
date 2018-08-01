@@ -72,7 +72,7 @@ class UserFactory(SQLAlchemyModelFactory):
 
 class GroupFactory(SQLAlchemyModelFactory):
     class Meta:
-        model = User
+        model = Group
 
     name = factory.LazyAttribute(lambda x: "Blahs")
     #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))

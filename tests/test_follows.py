@@ -1,5 +1,6 @@
 from flask import json
 from pytest import skip
+import pytest
 
 from tests import factories
 from tests.factories import get_authable_username, get_authable_email
@@ -16,7 +17,8 @@ headers = {
 def test_follow_user(client, session):
 
     users = factories.UserFactory.create_batch(3)
-    users.append(factories.MeFactory(username=get_authable_username(), email = get_authable_email()))
+    me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
+    users.append(me)
 
     uuid = users[0].uuid
 
