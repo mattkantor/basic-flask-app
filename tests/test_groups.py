@@ -30,6 +30,7 @@ headers = {
 
 
 def test_add_group_without_auth(client, session):
+    factories.UserFactory.cleanup()
     factories.MeFactory.create_batch(1)
 
     response = client.post('/api/v1/groups', data=json.dumps({"name":"test"}), headers = headers)
@@ -38,6 +39,7 @@ def test_add_group_without_auth(client, session):
 
 
 def test_add_a_new_group(client, session):
+    factories.UserFactory.cleanup()
     factories.MeFactory.create_batch(1)
 
     token = get_token(client, session)
@@ -48,10 +50,11 @@ def test_add_a_new_group(client, session):
     }
     response = client.post('/api/v1/groups',  data=json.dumps({"name":"test gorup"}),headers = headers)
     assert response.status_code == 200
-
+    factories.UserFactory.cleanup()
 
 
 def test_get_my_groups(client, session):
+    factories.UserFactory.cleanup()
     factories.MeFactory.create_batch(1)
     factories.GroupFactory._create_batch(3)
     token = get_token(client, session)
@@ -65,10 +68,12 @@ def test_get_my_groups(client, session):
     response = client.get('/api/v1/groups',headers = headers)
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
+    factories.UserFactory.cleanup()
 
 
 @skip("none")
 def test_add_user_to_group(client, session):
+    factories.UserFactory.cleanup()
     factories.MeFactory.create_batch(1)
     factories.GroupFactory.create_batch(3)
     user = User.query.first()
@@ -97,6 +102,7 @@ def test_add_user_to_group(client, session):
     print(grp_url)
     response = client.post(grp_url,headers = headers, data = data)
     assert response.status_code == 200
+
 
 
 #

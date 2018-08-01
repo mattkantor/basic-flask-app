@@ -23,12 +23,22 @@ class SQLAlchemyModelFactory(factory.Factory):
         abstract = True
 
     @classmethod
+    def create_batch(cls, size,  **kwargs):
+
+
+        return [cls.create(**kwargs) for _ in range(size)]
+
+    @classmethod
+    def cleanup(cls):
+        #if cls._meta.model:
+        db.session.query(cls._meta.model).delete()
+
+    @classmethod
     def _create(cls, model_class, *args, **kwargs):
         session = db.session
         session.begin(nested=True)
-        session.query(model_class).delete()
+        #session.query(model_class).delete()
         obj = model_class(*args, **kwargs)
-
 
         session.add(obj)
         session.commit()
@@ -37,7 +47,7 @@ class SQLAlchemyModelFactory(factory.Factory):
 
 
 class MeFactory(SQLAlchemyModelFactory):
-    pass
+
     class Meta:
         model = User
 
@@ -53,7 +63,7 @@ class UserFactory(SQLAlchemyModelFactory):
     class Meta:
         model = User
 
-    username = factory.LazyAttribute(lambda x: faker.first_name()+ faker.last_name())
+    username = factory.LazyAttribute(lambda x:"sally"+ faker.last_name())
     #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
     email = factory.LazyAttribute(lambda x: faker.email())
     password = PostGenerationMethodCall('set_password', 'password')#

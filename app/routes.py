@@ -36,8 +36,6 @@ class Route():
         apiv1.add_url_rule('/groups/<string:uuid>', 'show_group', GroupController.show, methods=['GET'])
 
         apiv1.add_url_rule('/groups/<string:uuid>/add_user', 'add_user', GroupController.add_user, methods=['POST'])
-
-        #
         apiv1.add_url_rule('/get_auth_token', 'get_auth_token', get_auth_token,methods=[ 'POST'])
         apiv1.add_url_rule('/register', 'register', register, methods=[ 'POST'])
 

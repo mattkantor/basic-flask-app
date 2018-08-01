@@ -14,6 +14,10 @@ class FollowController():
     @login_required
     def follow(uuid):
         '''follow a user my personal info'''
+
+        daa = User.query.all()
+        print(len(daa))
+
         target = User.query.filter(User.uuid == uuid).first()
         f = Follow(follower_id=g.user.id, following_id=target.id)
         db.session.add(f)

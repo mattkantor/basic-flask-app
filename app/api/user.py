@@ -56,9 +56,9 @@ class UserController():
                                  type: string
                                  description: your avatar'''
 
-        query = request.args.get("query")
+        #query = request.args.get("query")
         #tod - search on what?
-        users = User.query.all()
+        users = User.query.filter(User.id!=g.user.id).all()
         return common_response(object=users_schema.dump(users).data)
 
 

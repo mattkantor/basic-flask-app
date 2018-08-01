@@ -11,6 +11,7 @@ email = get_authable_email()
 
 @skip
 def test_should_get_feed_stories(client, session):
+    factories.UserFactory.cleanup()
     factories.MeFactory.create_batch(1)
     token = get_token(client, session)
 

@@ -1,5 +1,6 @@
 from flask import json
 
+from tests import factories
 from tests.factories import get_authable_email
 from tests.test_api import mimetype
 
