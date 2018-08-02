@@ -2,17 +2,26 @@ from flask import json
 from pytest import skip
 
 from tests import factories
+from tests.factories import get_authable_username, get_authable_email
 from tests.test_helper import get_token
 
-username="mattkantor"
-password = "password"
-email = "matthewkantor@msn.com"
+mimetype = 'application/json'
 
-@skip
-def test_follow_and_unfollow_user(client, session):
+def test_search_for_users(client, session):
     factories.UserFactory.cleanup()
-    token = get_token(client, session)
-    #need a token
+    me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
+    factories.UserFactory(username="johnsmith", email="johnsmith@gmail.com", password="password")
+    factories.UserFactory(username="johnsmith2", email="john2smith@gmail.com", password="password")
+    factories.UserFactory(username="johnsmith3", email="john3smith@gmail.com", password="password")
 
-    response = client.get('/api/v1/users/search',data=json.dumps({"query":"john"}))
-    assert response.status_code == 401
+    token = get_token(client, session)
+
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        "Authorization": "Bearer " + token
+    }
+
+    response = client.get('/api/v1/users/search?query=john', headers=headers)
+    assert response.status_code ==200
+    assert len(response.json["data"])==3

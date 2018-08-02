@@ -34,7 +34,7 @@ def test_follow_unfollow_user(client, session):
     response = client.get('/api/v1/following', headers=headers)
 
     assert response.status_code == 200
-    assert eval(response.json["data"]) != []
+    assert (response.json["data"]) != []
 
 
     response = client.get('/api/v1/unfollow/' + uuid_to_follow, headers=headers)
@@ -43,6 +43,6 @@ def test_follow_unfollow_user(client, session):
     response = client.get('/api/v1/following', headers=headers)
 
     assert response.status_code == 200
-    assert eval(response.json["data"])==[] #todo why is thius eval() ????
+    assert (response.json["data"])==[]
 
     factories.UserFactory.cleanup()

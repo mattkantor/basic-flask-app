@@ -35,8 +35,7 @@ class FollowController():
     def following():
         '''fwho am I following'''
         users = g.user.followed.all()
-        data = users_schema.dumps(users).data
-
+        data = users_schema.dump(users).data
         return common_response(status=200, object=data)
 
     @staticmethod
@@ -44,5 +43,5 @@ class FollowController():
     def followers():
         '''whos is following me'''
         users = g.user.followers.all()
-        return common_response(status=200, object=users_schema.dumps(users).data)
+        return common_response(status=200, object=users_schema.dump(users).data)
 

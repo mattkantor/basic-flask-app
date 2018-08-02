@@ -58,7 +58,10 @@ class UserController():
 
         #query = request.args.get("query")
         #tod - search on what?
-        users = User.query.filter(User.id!=g.user.id).all()
+        query = request.args.get('query')
+
+        print(request.url)
+        users = User.query.filter(User.username.ilike('%'+query+'%')).all()
         return common_response(object=users_schema.dump(users).data)
 
 
