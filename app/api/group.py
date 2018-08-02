@@ -67,8 +67,10 @@ class GroupController():
                 success, message = group.add_user_to_group(user_uuid)
 
             if success==True:
+                db.session.commit()
                 status = 200
             else:
+                db.session.rollback()
                 status = 400
 
             return common_response(status=status, message=message)
@@ -80,4 +82,25 @@ class GroupController():
     @login_required
     def remove_user():
         '''remove user from group'''
-        return common_response(status=200, message="OK")
+        req_data = request.get_json()
+        user_uuid = req_data["user_uuid"]
+        group = Group.query.filter(Group.uuid == uuid).first()
+        success = False
+        message = "OK"
+        try:
+            if group:
+                success, message = group.remove_user_to_group(user_uuid)
+
+            if success == True:
+                db.session.commit()
+                status = 200
+            else:
+                db.session.rollback()
+                status = 400
+
+            return common_response(status=status, message=message)
+        except AssertionError as message:
+            db.session.rollback()
+            return common_response(status=400, message=message, token="")
+
+

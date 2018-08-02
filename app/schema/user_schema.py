@@ -5,7 +5,7 @@ class UserSchema(Schema):
     class Meta:
         model = User
 
-        fields = ('uuid','email', 'username', 'uuid', 'avatar')
+        fields = ('uuid', 'username', 'uuid', 'avatar')
     uuid = fields.String()
     email = fields.String()
     username = fields.String()

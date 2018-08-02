@@ -52,15 +52,12 @@ class UserController():
                                  type: string
                                  description: The user name
                                  default: None
-                               email:
+                               avatar:
                                  type: string
-                                 description: your avatar'''
+                                 description: your avatar url'''
 
-        #query = request.args.get("query")
-        #tod - search on what?
+
         query = request.args.get('query')
-
-        print(request.url)
         users = User.query.filter(User.username.ilike('%'+query+'%')).all()
         return common_response(object=users_schema.dump(users).data)
 

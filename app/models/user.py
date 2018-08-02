@@ -28,7 +28,7 @@ class User( DogearMixin,db.Model):
     email = Column(String, unique=True)
 
     news = db.relationship('News', backref='user', lazy='dynamic')
-
+    groups = db.relationship('Group', backref='user', lazy='dynamic')
 
     followed = db.relationship(
         'User', secondary=followers,

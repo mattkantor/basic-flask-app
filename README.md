@@ -4,44 +4,54 @@
 
 This repository contains a sample minimal Flask application structure that includes:
 
-* SQLAlchemy
+* SQLAlchemy (using Postgresql)
 * Alembic
-* Celery
+* Flask
+* Celery (coming soon)
 * py.test
+* Swagger
 
-It runs on both Python 2.7 and 3.5.
+It runs on Python 3.5+.
 
 ## Installation
 
-First, clone the repository and create a virtualenv. Then install the requirements:
+First, clone the repository and create a virtualenv: 
 
-`$ pip install -r requirements.txt`
+`$ make init`
+
+Then install the requirements:
+
+
+`$ make update_deps`
 
 Before running the application make sure that your local PostgreSQL server is up. Then create the databases:
 
 ```
-CREATE DATABASE flask_example;
-CREATE DATABASE flask_example_test;
+$ CREATE DATABASE dogear;
+$ CREATE DATABASE dogear_test;
 ```
 
 Now you can create the tables using Alembic:
 
-`./manage.py db upgrade`
+`$ make upgrade`
 
 Finally you can run the application:
 
-`./manage.py runserver`
+`$ make run`
 
 or play in the Python REPL:
 
-`./manage.py shell`
+`$ python manage.py shell`
 
 In order to run unit tests in py.test invoke:
 
-`./manage.py test`
+`$ make test`
 
 
-## Contribution
 
-We are happy to see your way of scaffolding Flask applications. Feel free to submit an issue with your ideas or comments.
+#TODO
+DO hosting:
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
 
+Fabistrano:
+https://github.com/dlapiduz/fabistrano

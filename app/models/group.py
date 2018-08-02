@@ -14,10 +14,10 @@ class Group(DogearMixin, db.Model):
 
     __tablename__ = "groups"
 
-    id = Column(Integer(), primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String)
-    user_id = Column(Integer, nullable=False)
-    #user_ids = Column(ARRAY(Integer))
+    user_id = db.Column(Integer, db.ForeignKey('users.id'))
+    user_ids = Column(ARRAY(Integer), default=[])
     #user = relationship('User')
 
     def __init__(self, name=name, user_id=user_id):
@@ -27,9 +27,16 @@ class Group(DogearMixin, db.Model):
 
 
     def add_user_to_group(self,user_uuid):
+        user_ids = self.user_ids
+        user_ids.append(user_uuid)
+        self.user_ids = list(set(user_ids))
+
         return True, "OK"
 
     def remove_user_to_group(self, user_uuid):
+        user_ids = self.user_ids
+        user_ids.remove(user_uuid)
+        self.user_ids = list(set(user_ids))
         return True, "OK"
 
 
