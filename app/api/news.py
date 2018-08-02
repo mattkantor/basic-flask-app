@@ -52,6 +52,17 @@ class NewsController():
 
     @staticmethod
     @login_required
+    def full_news_feed():
+        followers = g.user.followers.all()
+        ids = [user.id for user in followers]
+        if len(ids)==0:
+            feed = News.query.order_by("created_at desc").limit(50).all()
+        else:
+            feed = News.query.filter(News.user_id==ids).order_by("created_at desc").all()
+        return common_response(object=newses_schema.dump(feed).data)
+
+    @staticmethod
+    @login_required
     def user_news_feed(uuid):
         user = User.query.filter(User.uuid==uuid).first()
         feed = user.user_news_feed()

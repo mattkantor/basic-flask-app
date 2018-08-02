@@ -18,6 +18,8 @@ class Route():
 
         apiv1.add_url_rule('/news','index', NewsController.index, methods=['GET'])
         apiv1.add_url_rule('/news', 'create', NewsController.create, methods=['POST'])
+        apiv1.add_url_rule('/user_feed', 'full_user_news_feed', NewsController.full_news_feed   ,
+                           methods=['GET'])
 
         apiv1.add_url_rule('/me', 'me', UserController.me, methods=['GET'])
         apiv1.add_url_rule('/users', 'put', UserController.update, methods=['POST'])

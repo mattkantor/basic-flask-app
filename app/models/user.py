@@ -30,7 +30,6 @@ class User( DogearMixin,db.Model):
     news = db.relationship('News', backref='user', lazy='dynamic')
 
 
-
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
