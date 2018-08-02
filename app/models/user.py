@@ -1,5 +1,7 @@
+from _md5 import md5
 
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, backref
 from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
@@ -9,8 +11,7 @@ import jwt
 import re
 from flask import current_app as app
 
-from app.models import DogearMixin, db
-
+from app.models import DogearMixin, db, News
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('users.id')),
@@ -26,12 +27,20 @@ class User( DogearMixin,db.Model):
     password = Column(String)
     email = Column(String, unique=True)
 
+    news = db.relationship('News', backref='user', lazy='dynamic')
+
+
 
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+
+    @hybrid_property  #placeholder
+    def avatar(self,size=128):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
     def __init__(self, email=email, username="", password=""):
         self.uuid = str(uuid.uuid4())
@@ -49,6 +58,13 @@ class User( DogearMixin,db.Model):
     def is_following(self, user):
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
+
+    def user_news_feed(self):
+        followed = News.query.join(
+            followers, (followers.c.followed_id == News.user_id)).filter(
+            followers.c.follower_id == self.id)
+        own = News.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(News.created_at.desc())
 
 
     def encode_auth_token(self):

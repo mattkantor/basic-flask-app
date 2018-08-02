@@ -1,6 +1,7 @@
 from flask import request, jsonify, g
 from . import apiv1
 from ..models.news import News
+from ..models.user import User
 from app import db
 from .auth import login_required
 from ..schema.news_schema import *
@@ -48,6 +49,13 @@ class NewsController():
 
             pass
             #for each group id, get the users and send the feed item to their feed
+
+    @staticmethod
+    @login_required
+    def user_news_feed(uuid):
+        user = User.query.filter(User.uuid==uuid).first()
+        feed = user.user_news_feed()
+        return common_response(object=newses_schema.dump(feed).data)
 
     @staticmethod
     @login_required

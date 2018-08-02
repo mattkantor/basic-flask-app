@@ -5,10 +5,11 @@ class UserSchema(Schema):
     class Meta:
         model = User
 
-        fields = ('uuid','email', 'username', 'uuid')
+        fields = ('uuid','email', 'username', 'uuid', 'avatar')
     uuid = fields.String()
     email = fields.String()
     username = fields.String()
+    avatar = fields.String()
 
 
     # Smart hyperlinking

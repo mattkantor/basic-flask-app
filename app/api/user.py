@@ -73,7 +73,7 @@ class UserController():
 
         user = User.query.filter(User.uuid == uuid).first()
 
-        news = News.query.filter(News.user_id==user.id).all()
+        news = user.news
 
         return common_response(object=user_schema.dump(user).data)
 

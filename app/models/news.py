@@ -15,7 +15,8 @@ class News(DogearMixin, db.Model):
     picture_url = Column(String)
     source = Column(String)
     url = Column(Text)
-    user_id = Column(Integer())
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     #soft_delete
 
 
