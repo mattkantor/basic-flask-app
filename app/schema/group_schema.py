@@ -7,17 +7,13 @@ class GroupSchema(Schema):
     class Meta:
         model = Group
 
-        fields = ('uuid','name')
+        fields = ('uuid','name', "user_ids")
     uuid = fields.String()
     name = fields.String()
+    user_ids = fields.String()
 
 
 
-    # Smart hyperlinking
-    # _links = ma.Hyperlinks({
-    #     'self': ma.URLFor('user_detail', id='<id>'),
-    #     'collection': ma.URLFor('users')
-    # })
 
 
 group_schema = GroupSchema()

@@ -4,6 +4,9 @@ import uuid
 import pytest
 from factory import PostGenerationMethodCall
 from faker import Faker
+from sqlalchemy import String
+from sqlalchemy.dialects.postgresql import ARRAY
+
 from app.models.user import User
 from app.models.group import Group
 from app.models.news import db, News
@@ -78,9 +81,9 @@ class GroupFactory(SQLAlchemyModelFactory):
         model = Group
 
     name = factory.LazyAttribute(lambda x: "Blahs")
-    #uuid = factory.LazyAttribute(lambda x: str(uuid.uuid4()))
-    #TODO will break
     user_id = factory.LazyAttribute(lambda x: 1)
+     #
+    #user_ids = factory.LazyAttribute(lambda x: [])
 
 
 #

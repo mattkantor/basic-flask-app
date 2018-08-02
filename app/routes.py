@@ -40,7 +40,10 @@ class Route():
         apiv1.add_url_rule('/groups', 'delete_group', GroupController.index, methods=['DELETE'])
         apiv1.add_url_rule('/groups/<string:uuid>', 'show_group', GroupController.show, methods=['GET'])
 
-        apiv1.add_url_rule('/groups/<string:uuid>/add_user', 'add_user', GroupController.add_user, methods=['POST'])
+        apiv1.add_url_rule('/groups/<string:uuid>/add_user/<string:user_uuid>', 'add_user_to_group', GroupController.add_user, methods=['GET'])
+        apiv1.add_url_rule('/groups/<string:uuid>/del_user/<string:user_uuid>', 'del_user_from_group',
+                           GroupController.remove_user, methods=['GET'])
+
         apiv1.add_url_rule('/get_auth_token', 'get_auth_token', get_auth_token,methods=[ 'POST'])
         apiv1.add_url_rule('/register', 'register', register, methods=[ 'POST'])
 

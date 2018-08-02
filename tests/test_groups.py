@@ -88,46 +88,61 @@ def test_add_user_to_group(client, session):
         'Accept': mimetype,
         "Authorization": "Bearer " + token
     }
-    # response = client.get('/api/v1/groups/' + group.uuid, headers=headers)
-    #
-    #
-    #
-    # group_id = group.uuid
-    # headers = {
-    #     'Content-Type': mimetype,
-    #     'Accept': mimetype,
-    #     "Authorization": "Bearer " + token
-    # }
-    data = json.dumps({"user_uuid":users[0].uuid})
-    grp_url = '/api/v1/groups/'+str(group.uuid)+'/add_user'
 
+    url = '/api/v1/groups/' + group.uuid + '/add_user/' + users[0].uuid
 
-    response = client.post(grp_url,headers = headers, data = data)
+    response = client.get(url, headers=headers)
     assert response.status_code == 200
 
 
 
 #
 # def test_add_self_to_group(client, session):
+#     factories.UserFactory.cleanup()
+#     factories.GroupFactory.cleanup()
+#     me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
+#     users = factories.UserFactory.create_batch(3)
+#     group = factories.GroupFactory(user_id=me.id, name="my test groupio")  # pass in userid
+#
 #     token = get_token(client, session)
 #     headers = {
 #         'Content-Type': mimetype,
 #         'Accept': mimetype,
 #         "Authorization": "Bearer " + token
 #     }
-#     response = client.get('/api/v1/groups/:id/add_user/:user_id',headers = headers)
-#     assert response.status_code == 200
-#     assert len(response.json) == 1
-#
-#
-# def test_delete_user_from_group(client, session):
-#     token = get_token(client, session)
-#     headers = {
-#         'Content-Type': mimetype,
-#         'Accept': mimetype,
-#         "Authorization": "Bearer " + token
-#     }
-#     response = client.post('/api/v1/group/:id/del_user/:user_id')
-#
-#     assert response.status_code == 200
-#     assert len(response.json) == 1
+#     url = '/api/v1/groups/'+group.uuid+'/add_user/' + users[0].uuid
+
+
+    # response = client.get(url,headers = headers)
+    # assert response.status_code == 400
+
+
+
+def test_delete_user_from_group(client, session):
+    factories.UserFactory.cleanup()
+    factories.GroupFactory.cleanup()
+    me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
+    users = factories.UserFactory.create_batch(3)
+
+    first_user_uuid = users[0].uuid
+    group = factories.GroupFactory(user_id=me.id, name="my test groupio") #user_ids=[users[0].uuid] # pass in userid
+    token = get_token(client, session)
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        "Authorization": "Bearer " + token
+    }
+
+    print("first uuid : "+first_user_uuid)
+    url = '/api/v1/groups/' + group.uuid + '/add_user/' + first_user_uuid
+    response = client.get(url, headers=headers)
+
+    assert response.status_code == 200
+    url = '/api/v1/groups/' + group.uuid
+    #response = client.get(url, headers=headers)
+    #print(response.json)
+
+    url = '/api/v1/groups/'+group.uuid+'/del_user/' + first_user_uuid
+    response = client.get(url,headers=headers )
+
+    assert response.status_code == 200

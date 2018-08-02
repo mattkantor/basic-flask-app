@@ -55,11 +55,10 @@ class GroupController():
 
     @staticmethod
     @login_required
-    def add_user(uuid):
+    def add_user(uuid, user_uuid):
         '''add a user'''
-        req_data = request.get_json()
-        user_uuid = req_data["user_uuid"]
-        group = Group.query.filter(Group.uuid==uuid).first()
+
+        group = Group.query.filter(Group.user_id==g.user.id).filter(Group.uuid==uuid).first()
         success = False
         message="OK"
         try:
@@ -80,16 +79,16 @@ class GroupController():
 
     @staticmethod
     @login_required
-    def remove_user():
+    def remove_user(uuid, user_uuid):
         '''remove user from group'''
-        req_data = request.get_json()
-        user_uuid = req_data["user_uuid"]
-        group = Group.query.filter(Group.uuid == uuid).first()
+
+
+        group = Group.query.filter(Group.user_id==g.user.id).filter(Group.uuid == uuid).first()
         success = False
         message = "OK"
         try:
             if group:
-                success, message = group.remove_user_to_group(user_uuid)
+                success, message = group.remove_user_from_group(user_uuid)
 
             if success == True:
                 db.session.commit()
