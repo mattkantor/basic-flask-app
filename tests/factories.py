@@ -31,7 +31,10 @@ class SQLAlchemyModelFactory(factory.Factory):
     @classmethod
     def cleanup(cls):
         #if cls._meta.model:
-        db.session.query(cls._meta.model).delete()
+        models = db.session.query(cls._meta.model).all()
+        for m in models:
+            db.session.delete(m)
+        db.session.commit()
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):

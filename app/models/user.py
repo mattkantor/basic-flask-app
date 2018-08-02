@@ -1,20 +1,21 @@
-from flask.ext.migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
+
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, validates
+from sqlalchemy.orm import relationship, validates, backref
 from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
 import uuid
 import app
 import jwt
 import re
-import os
-import sys
 from flask import current_app as app
 
 from app.models import DogearMixin, db
+
+
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'))
+)
 
 
 class User( DogearMixin,db.Model):
@@ -24,12 +25,30 @@ class User( DogearMixin,db.Model):
     username = Column(String)
     password = Column(String)
     email = Column(String, unique=True)
-    #groups = relationship("Group")
+
+
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def __init__(self, email=email, username="", password=""):
         self.uuid = str(uuid.uuid4())
         self.email = email
         self.username = username
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
 
 
     def encode_auth_token(self):
@@ -44,7 +63,7 @@ class User( DogearMixin,db.Model):
                 'sub': self.uuid
             }
 
-            print( app.config["SECRET_KEY"], file=sys.stderr)
+
             return jwt.encode(
                 payload,
                 app.config["SECRET_KEY"],
@@ -61,8 +80,7 @@ class User( DogearMixin,db.Model):
         :return: integer|string
         """
         try:
-            print( app.config["SECRET_KEY"])
-            print(auth_token)
+
             payload = jwt.decode(auth_token, app.config["SECRET_KEY"],algorithms='HS256')
             return payload['sub']
         except jwt.ExpiredSignatureError:

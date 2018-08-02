@@ -16,7 +16,6 @@ class News(DogearMixin, db.Model):
     source = Column(String)
     url = Column(Text)
     user_id = Column(Integer())
-
     #soft_delete
 
 
@@ -27,7 +26,6 @@ class News(DogearMixin, db.Model):
         self.user_id=user_id
         self.title=title
         self.url = url
-
         self.update_with_details()
 
     def __repr__(self):
@@ -45,9 +43,6 @@ class News(DogearMixin, db.Model):
     def update_with_details(self):
         #todo move this into celery
         url = self.url
-        print(self.title)
-        print(self.url)
-
         result = requests.get(url)
         soup = BeautifulSoup(result.content, "html.parser")
         for tag in soup.find_all("meta"):

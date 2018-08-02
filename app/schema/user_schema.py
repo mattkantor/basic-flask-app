@@ -11,7 +11,6 @@ class UserSchema(Schema):
     username = fields.String()
 
 
-
     # Smart hyperlinking
     # _links = ma.Hyperlinks({
     #     'self': ma.URLFor('user_detail', id='<id>'),

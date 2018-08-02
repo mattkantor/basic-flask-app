@@ -6,9 +6,8 @@ from app.models.user import User, db
 from flask import request, jsonify, redirect, url_for
 
 from app.schema.user_schema import user_schema
-from . import apiv1
 from .api_helper import  common_response
-import sys
+
 
 
 
@@ -46,11 +45,6 @@ def get_auth_token():
 def register():
 
     req_data = request.get_json(force=True)
-    print("---------")
-    print(req_data)
-
-    print(req_data["email"])
-
 
     try:
         user = User( email=req_data["email"])
@@ -66,7 +60,6 @@ def register():
     except AssertionError as message:
         db.session.rollback()
         return common_response(status=400, message=message, token="")
-
 
 
 
@@ -114,11 +107,7 @@ def login_required(function_to_wrap):
 
             resp = User.decode_auth_token(auth_token)
 
-
-
             user = User.query.filter(User.uuid==resp).first()
-
-
 
             if user:
                 a=True
@@ -134,6 +123,5 @@ def login_required(function_to_wrap):
             return function_to_wrap(*args, **kwargs)
         else:
             return common_response(status=401, message="Not authorized")
-
 
     return wrap

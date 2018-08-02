@@ -34,7 +34,7 @@ def db(app):
     _db.drop_all()
 
 
-    #print("db done", sys.stderr)
+
 
 @pytest.fixture(scope='session')
 def client(app):
