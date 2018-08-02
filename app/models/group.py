@@ -31,15 +31,12 @@ class Group(DogearMixin, db.Model):
 
         user_ids = self.user_ids
         user_ids.append(user_uuid)
-
         self.user_ids = list(set(user_ids))
-
 
         return True, "OK"
 
     def remove_user_from_group(self, user_uuid):
         user_ids = self.user_ids
-
         if user_uuid in user_ids:
             user_ids.remove(user_uuid)
             self.user_ids = list(set(user_ids))
