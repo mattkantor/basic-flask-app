@@ -18,15 +18,16 @@ class Route():
 
         apiv1.add_url_rule('/news','index', NewsController.index, methods=['GET'])
         apiv1.add_url_rule('/news', 'create', NewsController.create, methods=['POST'])
-        apiv1.add_url_rule('/user_feed', 'full_user_news_feed', NewsController.full_news_feed   ,
+        apiv1.add_url_rule('/news_feed', 'full_user_news_feed', NewsController.full_news_feed   ,
                            methods=['GET'])
+
 
         apiv1.add_url_rule('/me', 'me', UserController.me, methods=['GET'])
         apiv1.add_url_rule('/users', 'put', UserController.update, methods=['POST'])
         apiv1.add_url_rule('/users/<string:uuid>', 'show', UserController.show, methods=['GET'])
         apiv1.add_url_rule('/users/search', 'search', UserController.search, methods=['GET'])
 
-        apiv1.add_url_rule('/users/<string:uuid>/news', 'user_news_feed', NewsController.user_news_feed, methods=['GET'])
+        apiv1.add_url_rule('/users/<string:uuid>/feed', 'user_news_feed', NewsController.user_news_feed, methods=['GET'])
 
         apiv1.add_url_rule('/follow/<string:uuid>', 'follow', FollowController.follow, methods=['GET'])
         apiv1.add_url_rule('/unfollow/<string:uuid>', 'unfollow', FollowController.unfollow, methods=['GET'])
