@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, Text, event
 import uuid
 import requests
 from bs4 import BeautifulSoup
+from sqlalchemy.dialects.postgresql import ARRAY
+
 from app.models import db
 from .dogear_model import DogearMixin
 from ..util import get_domain_for_url
@@ -15,9 +17,12 @@ class News(DogearMixin, db.Model):
     picture_url = Column(String)
     source = Column(String)
     url = Column(Text)
+    #flagged_user_uuids = Column(ARRAY(String))
 
+    #move this to another table
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     #soft_delete
+    #add a status for flagging bad news
 
 
     def __init__(self, user_id, title, url, picture_url="", source=None):

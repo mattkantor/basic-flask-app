@@ -5,8 +5,42 @@ from app import db
 from .auth import login_required
 from ..schema.news_schema import *
 from .api_helper import *
+from feedgen.feed import FeedGenerator
+from flask import make_response
 
 class FeedController():
+    @staticmethod
+    def rss():
+        fg = FeedGenerator()
+        fg.id('http://dogear-2112.herokapp.com')
+
+        fg.title('Dogear Newsfeed')
+        fg.author({'name': 'Haley Cohen', 'email': 'haley@dogearnews.com'})
+        fg.link(href='http://dogearnews.com', rel='alternate')
+        fg.logo('https://www.fixpocket.com/public_assets/uploads/beats/1523422664maxresdefault.jpg')
+
+        fg.subtitle('The Dogear Social Newsfeed')
+        fg.link(href='http://localhost:5000/rss/index.rss', rel='self')
+        fg.language('en')
+
+        news = News.query.order_by("created_at desc").limit(25).all()
+        for n in news:
+
+            fe = fg.add_entry()
+            fe.id(n.url)
+            fe.title(n.title)
+            fe.link(href=n.url)
+            fe.enclosure(n.picture_url, 0, 'image/jpeg')
+
+            #fe.pubDate(n.created_at)
+
+        rssfeed = fg.rss_str(pretty=True)
+
+        response = make_response(rssfeed)
+        response.headers['Content-Type'] = 'application/rss+xml'
+        return response
+
+
     def __init__(self):
         ''''''
 

@@ -1,6 +1,7 @@
 from app.api.feed import FeedController
 from app.api.follows import FollowController
-from .api import apiv1
+from .api import apiv1, app_routes
+
 from .api.news import *
 from .api.user import *
 from .api.group import *
@@ -19,6 +20,9 @@ class Route():
         apiv1.add_url_rule('/news','index', NewsController.index, methods=['GET'])
         apiv1.add_url_rule('/news', 'create', NewsController.create, methods=['POST'])
         apiv1.add_url_rule('/news_feed', 'full_user_news_feed', NewsController.full_news_feed   ,
+                           methods=['GET'])
+
+        app_routes.add_url_rule('/index.rss', 'rss_Feed', FeedController.rss,
                            methods=['GET'])
 
         apiv1.add_url_rule('/public_feed', 'public_feed', NewsController.public_feed,

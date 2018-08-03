@@ -3,8 +3,10 @@ import os
 from celery import Celery
 from app.models import migrate, db
 from app.api import apiv1
+from app.api import app_routes
 from app.api.auth import *
 from .routes import Route
+
 from flasgger import Swagger
 
 
@@ -33,6 +35,7 @@ def create_app(config="../config/local.py", settings_override=None):
     api_routes = Route.build(apiv1)
     app.register_blueprint(api_routes, url_prefix='/api/v1')
     app.register_blueprint(github_blueprint, url_prefix="/login")
+    app.register_blueprint(app_routes, url_prefix='/rss')
 
     if config:
         app.config.from_pyfile(config)

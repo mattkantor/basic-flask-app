@@ -13,6 +13,7 @@ Flask-Script==2.0.5
 Flask-SQLAlchemy==2.0
 Flask-Dance[sqla]
 gunicorn==19.9.0
+feedgen
 marshmallow
 Flask-HTTPAuth
 requests
