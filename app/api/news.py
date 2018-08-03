@@ -62,6 +62,11 @@ class NewsController():
         return common_response(object=newses_schema.dump(feed).data)
 
     @staticmethod
+    def public_feed():
+        feed = News.query.all()
+        return common_response(object=newses_schema.dump(feed).data)
+
+    @staticmethod
     @login_required
     def user_news_feed(uuid):
         user = User.query.filter(User.uuid==uuid).first()
