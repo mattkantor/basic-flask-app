@@ -1,1 +1,1 @@
-web: gunicorn wgsi.py --log-file -
+web: gunicorn wsgi.py --log-file -
