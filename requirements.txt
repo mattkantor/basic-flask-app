@@ -3,6 +3,7 @@ BeautifulSoup4
 celery==3.1.18
 factory-boy==2.5.2
 Faker
+flasgger
 Flask==0.10.1
 Flask-Migrate==1.5
 Flask-WTF
@@ -11,7 +12,7 @@ flask-swagger
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.0
 Flask-Dance[sqla]
-gunicorn
+gunicorn==19.9.0
 marshmallow
 Flask-HTTPAuth
 requests
