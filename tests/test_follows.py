@@ -17,7 +17,7 @@ def test_follow_unfollow_user(client, session):
     me = factories.MeFactory(username=get_authable_username(), email=get_authable_email())
     users.append(me)
 
-    uuid_to_follow = users[0].uuid
+    username_to_follow = users[0].username
 
 
     token = get_token(client, session)
@@ -28,7 +28,7 @@ def test_follow_unfollow_user(client, session):
     }
 
 
-    response = client.get('/api/v1/follow/'+ uuid_to_follow, headers=headers)
+    response = client.get('/api/v1/follow/'+ username_to_follow, headers=headers)
     assert response.status_code == 200
 
     response = client.get('/api/v1/following', headers=headers)
@@ -37,7 +37,7 @@ def test_follow_unfollow_user(client, session):
     assert (response.json["data"]) != []
 
 
-    response = client.get('/api/v1/unfollow/' + uuid_to_follow, headers=headers)
+    response = client.get('/api/v1/unfollow/' + username_to_follow, headers=headers)
     assert response.status_code == 200
 
     response = client.get('/api/v1/following', headers=headers)

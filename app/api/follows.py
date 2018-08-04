@@ -12,20 +12,20 @@ class FollowController():
 
     @staticmethod
     @login_required
-    def follow(uuid):
+    def follow(username):
         '''follow a user my personal info'''
 
 
-        target = User.query.filter(User.uuid == uuid).first()
+        target = User.query.filter(User.username == username).first()
         g.user.follow(target)
         db.session.commit()
         return common_response(status=200)
 
     @staticmethod
     @login_required
-    def unfollow(uuid):
+    def unfollow(username):
         '''follow a user my personal info'''
-        target = User.query.filter(User.uuid == uuid).first()
+        target = User.query.filter(User.username == username).first()
         g.user.unfollow(target)
         db.session.commit()
         return common_response(status=200)

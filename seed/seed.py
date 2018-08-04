@@ -35,7 +35,7 @@ def seed():
 
         for i in range(1,5):
 
-            user = User(email=faker.email(), password="password", username=faker.first_name())
+            user = User(email=faker.email(), password="password", username=(faker.first_name()+faker.first_name()).lower())
             user.set_password(valid_password)
             db.session.add(user)
             db.session.commit()

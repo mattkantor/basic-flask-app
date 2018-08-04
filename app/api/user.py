@@ -64,11 +64,11 @@ class UserController():
 
     @staticmethod
     @login_required
-    def show(uuid):
-        if uuid =="":
+    def show(username):
+        if username =="":
             return common_response(status=404)
 
-        user = User.query.filter(User.uuid == uuid).first()
+        user = User.query.filter(User.username == username).first()
 
         news = user.news
 

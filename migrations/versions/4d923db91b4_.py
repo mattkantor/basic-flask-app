@@ -22,7 +22,7 @@ def upgrade():
                     sa.Column('uuid', sa.String(), nullable=True),
                     sa.Column('username', sa.String(), nullable=True),
                     sa.Column('password', sa.String(), nullable=True),
-                    sa.Column('email', sa.String(), nullable=True),
+                    sa.Column('email', sa.String(), nullable=True, unique=True),
                     sa.Column('created_at', postgresql.TIMESTAMP(), autoincrement=False, nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )

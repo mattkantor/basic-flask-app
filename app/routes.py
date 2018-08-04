@@ -30,13 +30,13 @@ class Route():
 
         apiv1.add_url_rule('/me', 'me', UserController.me, methods=['GET'])
         apiv1.add_url_rule('/users', 'put', UserController.update, methods=['POST'])
-        apiv1.add_url_rule('/users/<string:uuid>', 'show', UserController.show, methods=['GET'])
+        apiv1.add_url_rule('/users/<string:username>', 'show', UserController.show, methods=['GET'])
         apiv1.add_url_rule('/users/search', 'search', UserController.search, methods=['GET'])
 
         apiv1.add_url_rule('/users/<string:uuid>/feed', 'user_news_feed', NewsController.user_news_feed, methods=['GET'])
 
-        apiv1.add_url_rule('/follow/<string:uuid>', 'follow', FollowController.follow, methods=['GET'])
-        apiv1.add_url_rule('/unfollow/<string:uuid>', 'unfollow', FollowController.unfollow, methods=['GET'])
+        apiv1.add_url_rule('/follow/<string:username>', 'follow', FollowController.follow, methods=['GET'])
+        apiv1.add_url_rule('/unfollow/<string:username>', 'unfollow', FollowController.unfollow, methods=['GET'])
         apiv1.add_url_rule('/followers', 'followers', FollowController.followers, methods=['GET'])
         apiv1.add_url_rule('/following', 'following', FollowController.following, methods=['GET'])
 

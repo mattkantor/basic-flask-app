@@ -1,5 +1,4 @@
 from _md5 import md5
-
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, backref
@@ -22,10 +21,12 @@ followers = db.Table('followers',
 class User( DogearMixin,db.Model):
     __tablename__ = 'users'
 
-    id = Column(Integer(), primary_key=True)
-    username = Column(String)
+    id = Column(Integer, primary_key=True)
+    username = Column(String, unique=True)
     password = Column(String)
     email = Column(String, unique=True)
+    about = Column(Text)
+    geolocation = Column(String)
 
     news = db.relationship('News', backref='user', lazy='dynamic')
     groups = db.relationship('Group', backref='user', lazy='dynamic')
@@ -44,7 +45,11 @@ class User( DogearMixin,db.Model):
     def __init__(self, email=email, username="", password=""):
         self.uuid = str(uuid.uuid4())
         self.email = email
-        self.username = username
+        if username=="":
+            self.username=self.email
+        else:
+            self.username = username
+
 
     def follow(self, user):
         if not self.is_following(user):
@@ -105,13 +110,13 @@ class User( DogearMixin,db.Model):
 
     def set_password(self, password):
         if not password:
-            raise AssertionError('Password is required to sign up')
+            raise AssertionError('Hey hey, you need a password is required to sign up')
 
         # if not re.match('\d.*[A-Z]|[A-Z].*\d', password):
         #     raise AssertionError('Password must contain 1 capital letter and 1 number')
 
         if len(password) < 6 or len(password) > 50:
-            raise AssertionError('Your Password must be between 6 and 50 characters')
+            raise AssertionError('For super secrecy, your password must be between 6 and 50 characters')
 
 
 
@@ -120,13 +125,25 @@ class User( DogearMixin,db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    @validates("username")
+    def validate_username(self, key, username):
+        if len(username) < 4:
+            raise AssertionError('Your username must be more than 4 characters')
+        #check for unique please
+        name_exists = User.query.filter(User.username==username).count()
+        if name_exists > 0 :
+            raise AssertionError('Boo...someone already has that username.  Try again?')
+
+        return username
+
+
     @validates('email')
     def validate_email(self, key, email):
         if not email:
-            raise AssertionError('No email provided')
+            raise AssertionError('I think you forgot to enter your email?')
 
         if not re.match("[^@]+@[^@]+\.[^@]+", email):
-            raise AssertionError('Provided email is not an email address')
+            raise AssertionError('Can you double check your email address?  Seems funny.')
 
         return email
 

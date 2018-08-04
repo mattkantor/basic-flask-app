@@ -5,15 +5,16 @@ class UserSchema(Schema):
     class Meta:
         model = User
 
-        fields = ('uuid', 'username', 'uuid', 'avatar')
-    uuid = fields.String()
-    email = fields.String()
+        fields = ( 'username', 'avatar')
+
+
     username = fields.String()
     avatar = fields.String()
 
 
-    # Smart hyperlinking
-    # _links = ma.Hyperlinks({
+
+    #
+    # _links = Hyperlinks({
     #     'self': ma.URLFor('user_detail', id='<id>'),
     #     'collection': ma.URLFor('users')
     # })

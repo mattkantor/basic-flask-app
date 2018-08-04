@@ -21,6 +21,7 @@ class News(DogearMixin, db.Model):
 
     #move this to another table
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.relationship('User', backref='author')
     #soft_delete
     #add a status for flagging bad news
 
