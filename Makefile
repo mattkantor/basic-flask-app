@@ -1,9 +1,9 @@
 init:
-	python -m venv venv; \
+	python3 -m venv venv; \
 	echo 'source venv/bin/activate' >> .env; \
 	echo 'export DATABASE_URL=""' >> .env; \
 	source ./venv/bin/activate; \
-	pip install -r requirements.txt; \
+	pip3 install -r requirements.txt; \
 
 run:
 	python manage.py -c ../config/local.py runserver
