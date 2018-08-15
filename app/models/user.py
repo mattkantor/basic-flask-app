@@ -1,4 +1,4 @@
-from _md5 import md5
+import hashlib
 from sqlalchemy import Column, Integer, String, Text, ForeignKey,  Boolean
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, validates, backref
@@ -39,7 +39,7 @@ class User( DogearMixin,db.Model):
 
     @hybrid_property  #placeholder
     def avatar(self,size=128):
-        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        digest = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
     def __init__(self, email=email, username="", password=""):
