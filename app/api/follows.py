@@ -1,6 +1,6 @@
 from flask import request, jsonify, g, json
 from app import db
-from app.schema.user_schema import user_schema, users_schema
+from ..schema.schemas import *
 from ..models.user import User
 # from ..models.follow import Follow
 from . import apiv1, login_required, News

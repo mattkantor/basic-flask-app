@@ -4,7 +4,7 @@ from ..models.news import News
 from ..models.user import User
 from app import db
 from .auth import login_required
-from ..schema.news_schema import *
+from ..schema.schemas import *
 from .api_helper import *
 
 class NewsController():

@@ -1,9 +1,11 @@
 from flask import request, jsonify, g
+
+from app.models import News
 from . import apiv1
 from ..models.feed import Feed
 from app import db
 from .auth import login_required
-from ..schema.news_schema import *
+from ..schema.schemas import *
 from .api_helper import *
 from feedgen.feed import FeedGenerator
 from flask import make_response

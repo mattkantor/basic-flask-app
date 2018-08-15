@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from flask import g
-from app.schema.group_schema import groups_schema, group_schema
+from ..schema.schemas import *
 from . import apiv1, login_required
 from app.models import *
 from .api_helper import *

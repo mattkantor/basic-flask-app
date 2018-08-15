@@ -1,11 +1,12 @@
 from functools import wraps
+import requests
 from flask import g
 from flask_dance.contrib.github import make_github_blueprint, github
 #from app import login_manager
 from app.models.user import User, db
 from flask import request, jsonify, redirect, url_for
 
-from app.schema.user_schema import user_schema
+from ..schema.schemas import *
 from .api_helper import  common_response
 
 
@@ -17,6 +18,21 @@ github_blueprint = make_github_blueprint(
     )
 
 
+def oauth_verify(scheme, auth_token):
+    ''''''
+
+    client_id=""   
+    #validate sure its valid
+    if scheme=="github":
+        url = "https://github.com/applications/%s/tokens/%s" % (client_id,  auth_token)
+        response = requests.get(url)
+        if response.status_code==200:
+            email = response["email"]
+            user = User(email=email, username=email)
+
+
+            #crreate/update the user based on email key
+    #return jwt
 
 def get_auth_token():
     req_data = request.get_json()

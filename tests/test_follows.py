@@ -19,7 +19,6 @@ def test_follow_unfollow_user(client, session):
 
     username_to_follow = users[0].username
 
-
     token = get_token(client, session)
     headers = {
         'Content-Type': mimetype,
