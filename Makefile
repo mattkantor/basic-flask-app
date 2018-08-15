@@ -13,7 +13,7 @@ test:
 
 update_deps:
 	source ./venv/bin/activate; \
-	pip install --upgrade -r requirements.txt; \
+	pip3 install --upgrade -r requirements.txt; \
 
 fake:
 	python -m seed.seed
