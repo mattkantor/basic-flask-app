@@ -3,7 +3,7 @@ test:
   # this configures Django application to use attached postgres database that is run on `postgres` host
   - export DATABASE_URL=postgres://postgres:@postgres:5432/dogear_test
   - apt-get update -qy
-  - apt-get install postgresql postgresql-contrib
+  - apt-get install -y postgresql postgresql-contrib
   - update-rc.d postgresql enable
   - service postgresql start
   - create_db dogear_test
