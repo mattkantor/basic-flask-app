@@ -6,7 +6,7 @@ test:
   - apt-get install -y postgresql postgresql-contrib
   - update-rc.d postgresql enable
   - service postgresql start
-  - export PGPASSWORD=postgres && createdb -O postgres -U postgres dogear_test
+  - psql -c "CREATE DATABASE dogear_test;" -U postgres
   - apt-get install -y python3-dev python3-pip
   - make init
   - make update_deps
