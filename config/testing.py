@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 DEBUG = True
-SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/dogear_test'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/dogear_test'
 # SQLALCHEMY_ECHO = True
 CELERY_BROKER_URL = 'sqla+postgresql://localhost/dogear_test'
 CELERY_TASK_SERIALIZER = 'json'
