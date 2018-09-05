@@ -13,7 +13,15 @@ class FollowController():
     @staticmethod
     @login_required
     def follow(username):
-        '''follow a user my personal info'''
+        '''follow user
+               ---
+               responses:
+                 500:
+                   description: search has caused an error!!
+                 200:
+                   description: list of user profiles
+                   schema:
+                     id: User'''
 
 
         target = User.query.filter(User.username == username).first()

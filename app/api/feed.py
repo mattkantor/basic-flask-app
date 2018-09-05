@@ -51,7 +51,7 @@ class FeedController():
     def index():
         '''Returns all the news for a user
         Call this api passing a user key
-        ---
+
 
         responses:
           500:

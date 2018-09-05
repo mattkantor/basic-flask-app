@@ -78,33 +78,32 @@ def register():
         return common_response(status=400, message=message, token="")
 
 
-
-@github_blueprint.route("/github")
-def index():
-    ''' Login
-    Call this api passing a user key
-    ---
-
-    responses:
-      500:
-        description: Login is broken
-      200:
-        description: Login works
-        schema:
-          id: Login
-          properties:
-            title:
-              type: string
-              description: The article name
-              default: None
-            image:
-              type: base/64
-              description: Image representing the news item'''
-    if not github.authorized:
-        return redirect(url_for("github.login"))
-    resp = github.get("/user")
-    assert resp.ok
-    return common_response(status=200, message="You are @{login} on GitHub".format(login=resp.json()["login"]))
+#
+# @github_blueprint.route("/github")
+# def index():
+#     ''' Call this api passing an auth token key
+#     ---
+#
+#     responses:
+#       500:
+#         description: Login is broken
+#       200:
+#         description: Login works
+#         schema:
+#           id: Login
+#           properties:
+#             title:
+#               type: string
+#               description: The article name
+#               default: None
+#             image:
+#               type: base/64
+#               description: Image representing the news item'''
+#     if not github.authorized:
+#         return redirect(url_for("github.login"))
+#     resp = github.get("/user")
+#     assert resp.ok
+#     return common_response(status=200, message="You are @{login} on GitHub".format(login=resp.json()["login"]))
 
 
 def login_required(function_to_wrap):

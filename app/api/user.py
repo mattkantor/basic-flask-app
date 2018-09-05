@@ -38,22 +38,14 @@ class UserController():
     @login_required
     def search():
         '''search users
-                       ---
-                       responses:
-                         500:
-                           description: search has caused an error!!
-                         200:
-                           description: list of user profile
-                           schema:
-                             id: Users
-                             properties:
-                               username:
-                                 type: string
-                                 description: The user name
-                                 default: None
-                               avatar:
-                                 type: string
-                                 description: your avatar url'''
+               ---
+               responses:
+                 500:
+                   description: search has caused an error!!
+                 200:
+                   description: list of user profiles
+                   schema:
+                     id: User'''
 
 
         query = request.args.get('query')

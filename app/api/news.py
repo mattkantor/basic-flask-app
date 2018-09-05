@@ -52,6 +52,24 @@ class NewsController():
 
     @staticmethod
     @login_required
+    def delete_post():
+        try:
+            req_data = request.get_json()
+            news_id = req_data["news_id"]
+            if news_id:
+                news = News.query().get(news_id)
+                if news:
+                    db.session.delete(news)
+                    db.commit()
+                    return common_response(status=200, message="OK")
+                else:
+                    return common_response(status=404, message="News Item Not Found")
+        except AssertionError as message:
+            db.session.rollback()
+            return common_response(status=400, message=message, token="")
+
+    @staticmethod
+    @login_required
     def full_news_feed():
         followers = g.user.followers.all()
         ids = [user.id for user in followers]
@@ -76,27 +94,34 @@ class NewsController():
     @staticmethod
     @login_required
     def create():
-        '''Create a news for a user
-                Call this api passing a user key
-                ---
+        """ Creates a news artcile
+    uses JSON for body
+    ---
+    parameters:
+      - name: url
+        in: path
+        type: string
+        required: true
+        default: any
+    definitions:
+      Url:
+        type: string
+        properties:
+          palette_name:
+            type: array
+            items:
+              $ref: '#/definitions/Color'
+      Color:
+        type: string
+    responses:
+      200:
+        description: A list of colors (may be filtered by palette)
+        schema:
+          $ref: '#/definitions/Palette'
+        examples:
+          rgb: ['red', 'green', 'blue']
+    """
 
-                responses:
-                  500:
-                    description: Meh, we're broken!
-                  200:
-                    description: News created!
-                    schema:
-                      id: awesome
-                      properties:
-                        title:
-                          type: string
-                          description: The article name
-                          default: None
-                        image:
-                          type: base/64
-                          description: Image representing the news item
-
-                          '''
         #todo validate
         req_data = request.get_json()
 
