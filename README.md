@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/sunscrapers/flask-boilerplate.svg?branch=master)](https://travis-ci.org/sunscrapers/flask-boilerplate)
 
-# DogEar Server
+# Basic Flask App Server (may contain data models)
 
 This repository contains a sample minimal Flask application structure that includes:
 
